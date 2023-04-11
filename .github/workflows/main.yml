@@ -1,6 +1,8 @@
 name: Release to nuget.org
 on:
-  workflow_dispatch 
+  push:
+    tags:
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,10 +19,14 @@ jobs:
     - name: Get version from git tag
       id: get-tag-version
       run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-    - name: Test
+    - name: Test1
       run: echo "${{ steps.get-tag-version.outputs.version }}"
+    - name: Test2
+      run: echo "${{ github.ref_name }}"
     - name: Pack nugets
       #run: dotnet pack -c Release --no-build --output .
       run: dotnet pack -c Release /p:PackageVersion=${{ steps.get-tag-version.outputs.version }}
     #- name: Push to NuGet
      # run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
+    - name: Create a GitHub Release
+      run: gh release create ${{ github.ref_name }}
