@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+    - name: Get version from git tag
+      id: get-tag-version
+      run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
     - name: Checkout
       uses: actions/checkout@v3
     - name: Setup .NET SDK
@@ -16,11 +19,6 @@ jobs:
       run: dotnet build -c Release
     - name: Test
       run: dotnet test -c Release --no-build
-    - name: Get version from git tag
-      id: get-tag-version
-      run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
-    - name: Test1
-      run: echo "${{ steps.get-tag-version.outputs.version }}"
     - name: Pack nugets
       #run: dotnet pack -c Release --no-build --output .
       run: dotnet pack -c Release /p:PackageVersion=${{ steps.get-tag-version.outputs.version }}
@@ -28,3 +26,5 @@ jobs:
      # run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
     - name: Create a GitHub Release
       run: gh release create ${{ steps.get-tag-version.outputs.version }}
+      env:
+         GITHUB_TOKEN: ${{ secrets.github_token }}
