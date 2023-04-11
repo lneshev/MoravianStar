@@ -20,7 +20,7 @@ jobs:
     - name: Test
       run: dotnet test -c Release --no-build
     - name: Pack nugets
-      run: dotnet pack -c Release /p:PackageVersion=${{ steps.get-tag-version.outputs.version }}
+      run: dotnet pack -c Release /p:PackageVersion=${{ steps.get-tag-version.outputs.version }} --no-build --output .
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
     - name: Create a GitHub Release
