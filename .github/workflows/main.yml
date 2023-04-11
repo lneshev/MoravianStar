@@ -1,4 +1,4 @@
-name: Release to NuGet
+name: "Release to nuget.org version: ${{ github.ref_name }}"
 
 on:
   workflow_dispatch
