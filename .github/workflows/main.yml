@@ -18,7 +18,7 @@ jobs:
       run: dotnet test -c Release --no-build
     - name: Get version from git tag
       id: get-tag-version
-      run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+      run: echo "version=$(git describe --tags --abbrev=0 --always)" >> $GITHUB_OUTPUT
     - name: Test
       run: echo "${{ steps.get-tag-version.outputs.version }}"
     #- name: Pack nugets
