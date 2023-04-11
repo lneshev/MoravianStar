@@ -1,8 +1,6 @@
-run-name: "Release to nuget.org version: ${{ github.ref }}"
-
+name: Release to nuget.org
 on:
-  workflow_dispatch
-    
+  workflow_dispatch 
 jobs:
   build:
     runs-on: ubuntu-latest
