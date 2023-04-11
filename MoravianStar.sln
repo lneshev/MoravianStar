@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoravianStar", "MoravianStar\MoravianStar.csproj", "{13ED0FD4-A2ED-48D9-9651-0DB135D8F195}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoravianStar.MvcFramework", "MoravianStar.MvcFramework\MoravianStar.MvcFramework.csproj", "{749B674F-0724-40F7-A0EF-4D47C4AF62A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoravianStar.WebAPI", "MoravianStar.WebAPI\MoravianStar.WebAPI.csproj", "{58E32114-182D-4B8C-BF07-B8422A3223FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{13ED0FD4-A2ED-48D9-9651-0DB135D8F195}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13ED0FD4-A2ED-48D9-9651-0DB135D8F195}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13ED0FD4-A2ED-48D9-9651-0DB135D8F195}.Release|Any CPU.Build.0 = Release|Any CPU
-		{749B674F-0724-40F7-A0EF-4D47C4AF62A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{749B674F-0724-40F7-A0EF-4D47C4AF62A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{749B674F-0724-40F7-A0EF-4D47C4AF62A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{749B674F-0724-40F7-A0EF-4D47C4AF62A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E32114-182D-4B8C-BF07-B8422A3223FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E32114-182D-4B8C-BF07-B8422A3223FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E32114-182D-4B8C-BF07-B8422A3223FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E32114-182D-4B8C-BF07-B8422A3223FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

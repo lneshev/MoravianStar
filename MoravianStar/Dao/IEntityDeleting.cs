@@ -1,7 +1,10 @@
-﻿namespace MoravianStar.Dao
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace MoravianStar.Dao
 {
     public interface IEntityDeleting<TEntity>
     {
-        void Deleting(TEntity entity, ref bool suppressDelete);
+        Task DeletingAsync(TEntity entity, IDictionary<string, object> additionalParameters = null);
     }
 }

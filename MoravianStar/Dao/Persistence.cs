@@ -1,87 +1,149 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using MoravianStar.DependencyInjection;
+using MoravianStar.Resources;
+using System;
 
 namespace MoravianStar.Dao
 {
     public static class Persistence
     {
-        public static IPersister<TContract> GetPersister<TContract>(int id)
-            where TContract : class, IIdentifier
+        public static IDbTransaction<DbContext> DefaultDbTransaction
         {
-            if (typeof(PresentationModel).IsAssignableFrom(typeof(TContract)))
+            get
             {
-                var entityType = typeof(TContract);
-                var mapClassAttribute = (typeof(TContract).GetCustomAttributes(typeof(MapClassAttribute), false).FirstOrDefault() as MapClassAttribute);
-                if (mapClassAttribute != null)
+                if (DefaultDbContext == null)
                 {
-                    entityType = mapClassAttribute.EntityType;
-                    var persisterType = typeof(Persister<,>).MakeGenericType(entityType, typeof(TContract));
-                    var persisterInstance = persisterType.GetConstructor(new Type[] { typeof(int) }).Invoke(new object[] { id });
+                    throw new ArgumentNullException(nameof(DefaultDbContext), Strings.ADefaultDbContextWasNotSet);
+                }
 
-                    return (IPersister<TContract>)persisterInstance;
-                }
-                else
-                {
-                    throw new Exception(string.Format("'MapClass' attribute is not specified on class: '{0}'", entityType.FullName));
-                }
-            }
-            else
-            {
-                return new Persister<TContract>(id);
+                return DependencyInjectionContext.Container.Resolve<IDbTransaction<DbContext>>();
             }
         }
 
-        public static IPersister<TContract> GetPersister<TContract>(TContract contract)
-            where TContract : class, IIdentifier
-        {
-            if (typeof(PresentationModel).IsAssignableFrom(typeof(TContract)))
-            {
-                var entityType = typeof(TContract);
-                var mapClassAttribute = (typeof(TContract).GetCustomAttributes(typeof(MapClassAttribute), false).FirstOrDefault() as MapClassAttribute);
-                if (mapClassAttribute != null)
-                {
-                    entityType = mapClassAttribute.EntityType;
-                    var persisterType = typeof(Persister<,>).MakeGenericType(entityType, typeof(TContract));
-                    var persisterInstance = persisterType.GetConstructor(new Type[] { typeof(TContract) }).Invoke(new[] { contract });
+        public static DbContext DefaultDbContext { get { return Settings.Settings.DefaultDbContext; } }
 
-                    return (IPersister<TContract>)persisterInstance;
-                }
-                else
-                {
-                    throw new Exception(string.Format("'MapClass' attribute is not specified on class: '{0}'", entityType.FullName));
-                }
-            }
-            else
-            {
-                return new Persister<TContract>(contract);
-            }
+        public static IDbContextService<TDbContext> ForDbContext<TDbContext>()
+            where TDbContext : DbContext
+        {
+            return new DbContextService<TDbContext>();
         }
 
-        public static ILoader<TContract, TFilter> GetLoader<TContract, TFilter>(TFilter filter)
-            where TContract : class, IIdentifier
-            where TFilter : EntityFilter
+        public static IEntityRepository<TEntity, DbContext> ForEntity<TEntity>()
+            where TEntity : class, IEntityBase
         {
-            if (typeof(PresentationModel).IsAssignableFrom(typeof(TContract)))
-            {
-                var entityType = typeof(TContract);
-                var mapClassAttribute = (typeof(TContract).GetCustomAttributes(typeof(MapClassAttribute), false).FirstOrDefault() as MapClassAttribute);
-                if (mapClassAttribute != null)
-                {
-                    entityType = mapClassAttribute.EntityType;
-                    var loaderType = typeof(Loader<,,>).MakeGenericType(entityType, typeof(TContract), typeof(TFilter));
-                    var loaderInstance = loaderType.GetConstructor(new Type[] { typeof(TFilter) }).Invoke(new[] { filter });
+            return new EntityRepository<TEntity, DbContext>(DefaultDbTransaction);
+        }
 
-                    return (ILoader<TContract, TFilter>)loaderInstance;
-                }
-                else
-                {
-                    throw new Exception(string.Format("'MapClass' attribute is not specified on class: '{0}'", entityType.FullName));
-                }
-            }
-            else
+        public static IEntityRepository<TEntity, TId, DbContext> ForEntity<TEntity, TId>()
+            where TEntity : class, IEntityBase<TId>
+        {
+            return new EntityRepository<TEntity, TId, DbContext>(DefaultDbTransaction);
+        }
+
+        public static IModelRepository<TModel, TEntity, DbContext> ForModel<TModel, TEntity>()
+            where TModel : class, IModelBase, new()
+            where TEntity : class, IEntityBase, IProjectionBase, new()
+        {
+            if (DefaultDbContext == null)
             {
-                return new Loader<TContract, TFilter>(filter);
+                throw new ArgumentNullException(nameof(DefaultDbContext), Strings.ADefaultDbContextWasNotSet);
             }
+
+            var modelsMappingService = DependencyInjectionContext.Container.Resolve<IModelsMappingService<TModel, TEntity>>();
+            if (modelsMappingService == null)
+            {
+                throw new NotImplementedException(string.Format(Strings.AnInstanceForServiceWasNotFound, nameof(IModelsMappingService<TModel, TEntity>)));
+            }
+
+            return new ModelRepository<TModel, TEntity, DbContext>(ForEntity<TEntity>(), modelsMappingService);
+        }
+
+        public static IModelRepository<TModel, TEntity, TId, DbContext> ForModel<TModel, TEntity, TId>()
+            where TModel : class, IModelBase<TId>, new()
+            where TEntity : class, IEntityBase<TId>, IProjectionBase, new()
+        {
+            if (DefaultDbContext == null)
+            {
+                throw new ArgumentNullException(nameof(DefaultDbContext), Strings.ADefaultDbContextWasNotSet);
+            }
+
+            var modelsMappingService = DependencyInjectionContext.Container.Resolve<IModelsMappingService<TModel, TEntity>>();
+            if (modelsMappingService == null)
+            {
+                throw new NotImplementedException(string.Format(Strings.AnInstanceForServiceWasNotFound, nameof(IModelsMappingService<TModel, TEntity>)));
+            }
+
+            return new ModelRepository<TModel, TEntity, TId, DbContext>(ForEntity<TEntity, TId>(), modelsMappingService);
         }
     }
+
+    public static class Test
+    {
+        public static void TestMethod()
+        {
+            var a = Persistence.ForDbContext<TestContext>().DbContext;
+            var b = Persistence.ForDbContext<TestContext>().DbTransaction;
+            //var c = Persistence.ForDbContext<TestContext>().ForEntity<Address>().DbContext;
+            //var d = Persistence.ForDbContext<TestContext>().ForEntity<Address, int>().DbContext;
+            //var e = Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address>().DbContext;
+            //var f = Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address, int>().DbContext;
+
+            Persistence.ForDbContext<TestContext>().ForEntity<Address>().ReadAsync<AddressFilter>();
+            Persistence.ForDbContext<TestContext>().ForEntity<Address, int>().GetAsync(1);
+            Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
+            Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address, int>().GetAsync(1);
+
+            var g = Persistence.DefaultDbContext;
+            var h = Persistence.DefaultDbTransaction;
+            //var i = Persistence.ForEntity<Address>().DbContext;
+            //var j = Persistence.ForEntity<Address, int>().DbContext;
+            //var k = Persistence.ForModel<AddressModel, Address>().DbContext;
+            //var l = Persistence.ForModel<AddressModel, Address, int>().DbContext;
+
+            Persistence.ForEntity<Address>().ReadAsync<AddressFilter>();
+            Persistence.ForEntity<Address, int>().GetAsync(1);
+            Persistence.ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
+            Persistence.ForModel<AddressModel, Address, int>().GetAsync(1);
+        }
+    }
+
+    public class TestContext : DbContext
+    {
+        public TestContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        protected TestContext()
+        {
+        }
+    }
+
+    public class Address : EntityBase<int>
+    {
+    }
+
+    public class AddressModel : ModelBase<int>
+    {
+    }
+
+    public class AddressFilter : FilterSorterBase<Address>
+    {
+    }
 }
+
+// Persistence.GetLoader<Address>().GetAsync();
+// Persistence.GetLoader<AddressModel>().GetAsync();
+
+// Persistence.GetPersister<Address>().Save();
+// Persistence.GetPersister<AddressModel>().Save();
+
+// Persistence.ForDBContext<SystemContext>().ForEntity<Address>().GetAsync(id);
+// Persistence.ForEntity<Address>().GetAsync(id);
+
+// Persistence.ForDBContext<SystemContext>().ForModel<AddressModel>().GetAsync(id);
+// Persistence.ForModel<AddressModel>().GetAsync(id);
+
+// Persistence.ForDBContext<SystemContext>().For<Address>().GetAsync(id);
+// Persistence.ForDBContext<SystemContext>().For<AddressModel>().GetAsync(id);
+// Persistence.For<Address>().GetAsync(id);
+// Persistence.For<AddressModel>().GetAsync(id);
