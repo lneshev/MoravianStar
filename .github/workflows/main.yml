@@ -1,0 +1,26 @@
+name: Release to nuget.org
+on:
+  workflow_dispatch 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+    - name: Build
+      run: dotnet build -c Release
+    - name: Test
+      run: dotnet test -c Release --no-build
+    - name: Get version from git tag
+      id: get-tag-version
+      run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+    - name: Test
+      run: echo "${{ steps.get-tag-version.outputs.version }}"
+    - name: Pack nugets
+      #run: dotnet pack -c Release --no-build --output .
+      run: dotnet pack -c Release /p:PackageVersion=${{ steps.get-tag-version.outputs.version }}
+    #- name: Push to NuGet
+     # run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
