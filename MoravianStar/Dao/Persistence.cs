@@ -77,7 +77,7 @@ namespace MoravianStar.Dao
         }
     }
 
-    public static class Test
+    internal static class Test
     {
         public static void TestMethod()
         {
@@ -107,7 +107,7 @@ namespace MoravianStar.Dao
         }
     }
 
-    public class TestContext : DbContext
+    internal class TestContext : DbContext
     {
         public TestContext(DbContextOptions options) : base(options)
         {
@@ -118,15 +118,15 @@ namespace MoravianStar.Dao
         }
     }
 
-    public class Address : EntityBase<int>
+    internal class Address : EntityBase<int>
     {
     }
 
-    public class AddressModel : ModelBase<int>
+    internal class AddressModel : ModelBase<int>
     {
     }
 
-    public class AddressFilter : FilterSorterBase<Address>
+    internal class AddressFilter : FilterSorterBase<Address>
     {
     }
 }
