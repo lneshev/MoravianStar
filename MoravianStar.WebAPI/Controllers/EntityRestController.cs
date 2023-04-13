@@ -24,16 +24,16 @@ namespace MoravianStar.WebAPI.Controllers
     [ApiController]
     [Route(RoutingConstants.ApiController)]
     public abstract class EntityRestController<TEntity, TId, TModel, TFilter, TDbContext> : ControllerBase
-        where TEntity : class, IEntityBase<TId>
-        where TModel : class, IModelBase<TId>, IProjectionBase
+        where TEntity : class, IEntityBase<TId>, IProjectionBase, new()
+        where TModel : class, IModelBase<TId>, IProjectionBase, new()
         where TFilter : FilterSorterBase<TEntity>, new()
         where TDbContext : DbContext
     {
-        private readonly IModelRepository<TModel, TEntity, TId, TDbContext> modelRepository;
+        protected readonly IModelRepository<TModel, TEntity, TId, TDbContext> modelRepository;
 
-        public EntityRestController(IModelRepository<TModel, TEntity, TId, TDbContext> modelRepository)
+        public EntityRestController()
         {
-            this.modelRepository = modelRepository;
+            modelRepository = Persistence.ForDbContext<TDbContext>().ForModel<TModel, TEntity, TId>();
         }
 
         /// <summary>
