@@ -61,11 +61,11 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A default DbContext was not set. Please set a default DbContext using: &quot;Settings.DefaultDbContext = YourDbContext&quot; when the application starts..
+        ///   Looks up a localized string similar to A default DbContext type was not set. Please set a default DbContext type using: &quot;Settings.DefaultDbContextType = YourDbContextType&quot; when the application starts..
         /// </summary>
-        public static string ADefaultDbContextWasNotSet {
+        public static string ADefaultDbContextTypeWasNotSet {
             get {
-                return ResourceManager.GetString("ADefaultDbContextWasNotSet", resourceCulture);
+                return ResourceManager.GetString("ADefaultDbContextTypeWasNotSet", resourceCulture);
             }
         }
         

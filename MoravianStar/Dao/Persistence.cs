@@ -11,16 +11,18 @@ namespace MoravianStar.Dao
         {
             get
             {
-                if (DefaultDbContext == null)
+                if (DefaultDbContextType == null)
                 {
-                    throw new ArgumentNullException(nameof(DefaultDbContext), Strings.ADefaultDbContextWasNotSet);
+                    throw new ArgumentNullException(nameof(DefaultDbContextType), Strings.ADefaultDbContextTypeWasNotSet);
                 }
 
-                return DependencyInjectionContext.Container.Resolve<IDbTransaction<DbContext>>();
+                var serviceType = typeof(IDbTransaction<>).MakeGenericType(DefaultDbContextType);
+
+                return (IDbTransaction<DbContext>)DependencyInjectionContext.Container.Resolve(serviceType);
             }
         }
 
-        public static DbContext DefaultDbContext { get { return Settings.Settings.DefaultDbContext; } }
+        public static Type DefaultDbContextType { get { return Settings.Settings.DefaultDbContextType; } }
 
         public static IDbContextService<TDbContext> ForDbContext<TDbContext>()
             where TDbContext : DbContext
@@ -44,11 +46,6 @@ namespace MoravianStar.Dao
             where TModel : class, IModelBase, new()
             where TEntity : class, IEntityBase, IProjectionBase, new()
         {
-            if (DefaultDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(DefaultDbContext), Strings.ADefaultDbContextWasNotSet);
-            }
-
             var modelsMappingService = DependencyInjectionContext.Container.Resolve<IModelsMappingService<TModel, TEntity>>();
             if (modelsMappingService == null)
             {
@@ -62,11 +59,6 @@ namespace MoravianStar.Dao
             where TModel : class, IModelBase<TId>, new()
             where TEntity : class, IEntityBase<TId>, IProjectionBase, new()
         {
-            if (DefaultDbContext == null)
-            {
-                throw new ArgumentNullException(nameof(DefaultDbContext), Strings.ADefaultDbContextWasNotSet);
-            }
-
             var modelsMappingService = DependencyInjectionContext.Container.Resolve<IModelsMappingService<TModel, TEntity>>();
             if (modelsMappingService == null)
             {
@@ -93,7 +85,7 @@ namespace MoravianStar.Dao
             Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
             Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address, int>().GetAsync(1);
 
-            var g = Persistence.DefaultDbContext;
+            var g = Persistence.DefaultDbContextType;
             var h = Persistence.DefaultDbTransaction;
             //var i = Persistence.ForEntity<Address>().DbContext;
             //var j = Persistence.ForEntity<Address, int>().DbContext;

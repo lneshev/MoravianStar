@@ -12,7 +12,7 @@ namespace MoravianStar.WebAPI.Attributes
     {
         public ExecuteInTransactionAsyncAttribute() : base(typeof(ExecuteInTransactionAsyncImplAttribute<>))
         {
-            DbContextType = Persistence.DefaultDbContext.GetType();
+            DbContextType = Persistence.DefaultDbContextType;
         }
 
         public ExecuteInTransactionAsyncAttribute(Type dbContextType) : base(typeof(ExecuteInTransactionAsyncImplAttribute<>))

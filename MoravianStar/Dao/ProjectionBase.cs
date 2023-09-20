@@ -1,7 +1,6 @@
-﻿using MoravianStar.Dao;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataLayer.Common.Core.Projections
+namespace MoravianStar.Dao
 {
     /// <summary>
     /// The base class of a projection containing Id.
