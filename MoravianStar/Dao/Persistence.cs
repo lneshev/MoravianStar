@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MoravianStar.DependencyInjection;
 using MoravianStar.Resources;
 using System;
@@ -18,7 +19,7 @@ namespace MoravianStar.Dao
 
                 var serviceType = typeof(IDbTransaction<>).MakeGenericType(DefaultDbContextType);
 
-                return (IDbTransaction<DbContext>)DependencyInjectionContext.Container.Resolve(serviceType);
+                return (IDbTransaction<DbContext>)ServiceLocator.Container.GetRequiredService(serviceType);
             }
         }
 
@@ -46,12 +47,7 @@ namespace MoravianStar.Dao
             where TModel : class, IModelBase, new()
             where TEntity : class, IEntityBase, IProjectionBase, new()
         {
-            var modelsMappingService = DependencyInjectionContext.Container.Resolve<IModelsMappingService<TModel, TEntity>>();
-            if (modelsMappingService == null)
-            {
-                throw new NotImplementedException(string.Format(Strings.AnInstanceForServiceWasNotFound, nameof(IModelsMappingService<TModel, TEntity>)));
-            }
-
+            var modelsMappingService = ServiceLocator.Container.GetRequiredService<IModelsMappingService<TModel, TEntity>>();
             return new ModelRepository<TModel, TEntity, DbContext>(ForEntity<TEntity>(), modelsMappingService);
         }
 
@@ -59,12 +55,7 @@ namespace MoravianStar.Dao
             where TModel : class, IModelBase<TId>, new()
             where TEntity : class, IEntityBase<TId>, IProjectionBase, new()
         {
-            var modelsMappingService = DependencyInjectionContext.Container.Resolve<IModelsMappingService<TModel, TEntity>>();
-            if (modelsMappingService == null)
-            {
-                throw new NotImplementedException(string.Format(Strings.AnInstanceForServiceWasNotFound, nameof(IModelsMappingService<TModel, TEntity>)));
-            }
-
+            var modelsMappingService = ServiceLocator.Container.GetRequiredService<IModelsMappingService<TModel, TEntity>>();
             return new ModelRepository<TModel, TEntity, TId, DbContext>(ForEntity<TEntity, TId>(), modelsMappingService);
         }
     }

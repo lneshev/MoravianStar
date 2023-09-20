@@ -61,7 +61,7 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A default DbContext type was not set. Please set a default DbContext type using: &quot;Settings.DefaultDbContextType = YourDbContextType&quot; when the application starts..
+        ///   Looks up a localized string similar to A default DbContext type was not set. Please set a default DbContext type using: &quot;Settings.DefaultDbContextType = typeof(YourDbContextType);&quot; when the application starts..
         /// </summary>
         public static string ADefaultDbContextTypeWasNotSet {
             get {
@@ -79,20 +79,20 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An instance for service {0} was not found..
-        /// </summary>
-        public static string AnInstanceForServiceWasNotFound {
-            get {
-                return ResourceManager.GetString("AnInstanceForServiceWasNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Another transaction has already started. Either commit or rollback it before beginning a new transaction..
         /// </summary>
         public static string AnotherTransactionHasAlreadyStarted {
             get {
                 return ResourceManager.GetString("AnotherTransactionHasAlreadyStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A service provider was not set. Please set a service provider using: &quot;Settings.ServiceProvider = app.ApplicationServices;&quot; when the application starts..
+        /// </summary>
+        public static string AServiceProviderWasNotSet {
+            get {
+                return ResourceManager.GetString("AServiceProviderWasNotSet", resourceCulture);
             }
         }
         

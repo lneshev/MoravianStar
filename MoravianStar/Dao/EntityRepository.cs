@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MoravianStar.DependencyInjection;
 using MoravianStar.Exceptions;
 using MoravianStar.Extensions;
@@ -7,7 +8,6 @@ using MoravianStar.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -113,7 +113,7 @@ namespace MoravianStar.Dao
 
             ValidateAsync(entity, originalEntity, additionalParameters);
 
-            DependencyInjectionContext.Container.TryResolveAll<IEntitySaving<TEntity>>().ForEach(async (IEntitySaving<TEntity> x) => await x.SavingAsync(entity, originalEntity, additionalParameters));
+            ServiceLocator.Container.GetServices<IEntitySaving<TEntity>>().ToList().ForEach(async (IEntitySaving<TEntity> x) => await x.SavingAsync(entity, originalEntity, additionalParameters));
 
             bool entityIsNew = entity.IsNew();
             if (entityIsNew)
@@ -127,7 +127,7 @@ namespace MoravianStar.Dao
 
             await dbTransaction.DbContext.SaveChangesAsync();
 
-            DependencyInjectionContext.Container.TryResolveAll<IEntitySaved<TEntity>>().ForEach(async (IEntitySaved<TEntity> x) => await x.SavedAsync(entity, originalEntity, entityIsNew, additionalParameters));
+            ServiceLocator.Container.GetServices<IEntitySaved<TEntity>>().ToList().ForEach(async (IEntitySaved<TEntity> x) => await x.SavedAsync(entity, originalEntity, entityIsNew, additionalParameters));
         }
 
         public async Task<TEntity> DeleteAsync(TEntity entity, IDictionary<string, object> additionalParameters = null)
@@ -142,12 +142,12 @@ namespace MoravianStar.Dao
                 additionalParameters = new Dictionary<string, object>();
             }
 
-            DependencyInjectionContext.Container.TryResolveAll<IEntityDeleting<TEntity>>().ForEach(async (IEntityDeleting<TEntity> x) => await x.DeletingAsync(entity, additionalParameters));
+            ServiceLocator.Container.GetServices<IEntityDeleting<TEntity>>().ToList().ForEach(async (IEntityDeleting<TEntity> x) => await x.DeletingAsync(entity, additionalParameters));
 
             entity = dbTransaction.DbContext.Remove(entity).Entity;
             await dbTransaction.DbContext.SaveChangesAsync();
 
-            DependencyInjectionContext.Container.TryResolveAll<IEntityDeleted<TEntity>>().ForEach(async (IEntityDeleted<TEntity> x) => await x.DeletedAsync(entity, additionalParameters));
+            ServiceLocator.Container.GetServices<IEntityDeleted<TEntity>>().ToList().ForEach(async (IEntityDeleted<TEntity> x) => await x.DeletedAsync(entity, additionalParameters));
 
             return entity;
         }
@@ -159,7 +159,7 @@ namespace MoravianStar.Dao
                 return (TEntity)dbTransaction.DbContext.Entry(entity).OriginalValues.ToObject();
             }
 
-            var service = DependencyInjectionContext.Container.Resolve<IGetOriginalEntity<TEntity>>();
+            var service = ServiceLocator.Container.GetService<IGetOriginalEntity<TEntity>>();
             if (service != null)
             {
                 return await service.GetAsync(entity, defaultRetreiver, additionalParameters);
@@ -172,12 +172,12 @@ namespace MoravianStar.Dao
 
         private void ValidateAsync(TEntity entity, TEntity originalEntity, IDictionary<string, object> additionalParameters)
         {
-            DependencyInjectionContext.Container.TryResolveAll<IEntityValidating<TEntity>>().ForEach(async (IEntityValidating<TEntity> x) => await x.ValidatingAsync(entity, originalEntity, additionalParameters));
+            ServiceLocator.Container.GetServices<IEntityValidating<TEntity>>().ToList().ForEach(async (IEntityValidating<TEntity> x) => await x.ValidatingAsync(entity, originalEntity, additionalParameters));
 
             var validationContext = new ValidationContext(entity);
             Validator.ValidateObject(entity, validationContext, true);
 
-            DependencyInjectionContext.Container.TryResolveAll<IEntityValidated<TEntity>>().ForEach(async (IEntityValidated<TEntity> x) => await x.ValidatedAsync(entity, originalEntity, additionalParameters));
+            ServiceLocator.Container.GetServices<IEntityValidated<TEntity>>().ToList().ForEach(async (IEntityValidated<TEntity> x) => await x.ValidatedAsync(entity, originalEntity, additionalParameters));
         }
     }
 
