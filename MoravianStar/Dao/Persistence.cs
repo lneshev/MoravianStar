@@ -18,9 +18,8 @@ namespace MoravianStar.Dao
                 }
 
                 var serviceType = typeof(IDbTransaction<>).MakeGenericType(DefaultDbContextType);
-                var service = ServiceLocator.Container.GetRequiredService(serviceType);
-                var castedService = service as IDbTransaction<DbContext>;
-                return castedService;
+
+                return (IDbTransaction<DbContext>)ServiceLocator.Container.GetRequiredService(serviceType);
             }
         }
 
