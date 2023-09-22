@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using MoravianStar.Dao;
 using System;
 using System.Threading.Tasks;
@@ -8,33 +7,25 @@ using System.Threading.Tasks;
 namespace MoravianStar.WebAPI.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class ExecuteInTransactionAsyncAttribute : TypeFilterAttribute
+    public class ExecuteInTransactionAsyncAttribute : Attribute, IAsyncActionFilter
     {
-        public ExecuteInTransactionAsyncAttribute() : base(typeof(ExecuteInTransactionAsyncImplAttribute<>))
+        public ExecuteInTransactionAsyncAttribute()
         {
             DbContextType = Persistence.DefaultDbContextType;
         }
 
-        public ExecuteInTransactionAsyncAttribute(Type dbContextType) : base(typeof(ExecuteInTransactionAsyncImplAttribute<>))
+        public ExecuteInTransactionAsyncAttribute(Type dbContextType)
         {
             DbContextType = dbContextType;
         }
 
         public Type DbContextType { get; }
-    }
-
-    public class ExecuteInTransactionAsyncImplAttribute<TDbContext> : IAsyncActionFilter
-        where TDbContext : DbContext
-    {
-        private readonly IDbTransaction<TDbContext> dbTransaction;
-
-        public ExecuteInTransactionAsyncImplAttribute(IDbTransaction<TDbContext> dbTransaction)
-        {
-            this.dbTransaction = dbTransaction;
-        }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var serviceType = typeof(IDbTransaction<>).MakeGenericType(DbContextType);
+            var dbTransaction = (IDbTransaction)context.HttpContext.RequestServices.GetRequiredService(serviceType);
+
             await dbTransaction.BeginAsync();
 
             var executedContext = await next();
