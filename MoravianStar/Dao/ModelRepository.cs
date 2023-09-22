@@ -56,11 +56,6 @@ namespace MoravianStar.Dao
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (additionalParameters == null)
-            {
-                throw new ArgumentNullException(nameof(additionalParameters));
-            }
-
             var entity = new TEntity();
 
             entity = (await modelsMappingService.ToEntities(new List<EntityModelPair<TEntity, TModel>>()
@@ -128,11 +123,6 @@ namespace MoravianStar.Dao
                 throw new ArgumentNullException(nameof(model.Id));
             }
 
-            if (additionalParameters == null)
-            {
-                throw new ArgumentNullException(nameof(additionalParameters));
-            }
-
             var entity = await EntityRepository.GetAsync(model.Id, modelsMappingService.GetIncludes, true);
 
             entity = (await modelsMappingService.ToEntities(new List<EntityModelPair<TEntity, TModel>>()
@@ -160,11 +150,6 @@ namespace MoravianStar.Dao
 
         public async Task<TModel> DeleteAsync(TId id, IDictionary<string, object> additionalParameters = null)
         {
-            if (additionalParameters is null)
-            {
-                throw new ArgumentNullException(nameof(additionalParameters));
-            }
-
             var entity = await EntityRepository.GetAsync(id, modelsMappingService.GetIncludes);
 
             var model = (await modelsMappingService.ToModels(new List<ProjectionModelPair<TEntity, TModel>>()
