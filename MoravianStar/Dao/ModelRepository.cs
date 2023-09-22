@@ -95,8 +95,9 @@ namespace MoravianStar.Dao
     {
         public new IEntityRepository<TEntity, TId, TDbContext> EntityRepository { get; }
 
-        public ModelRepository(IEntityRepository<TEntity, TDbContext> entityRepository, IModelsMappingService<TModel, TEntity> modelsMappingService) : base(entityRepository, modelsMappingService)
+        public ModelRepository(IEntityRepository<TEntity, TId, TDbContext> entityRepository, IModelsMappingService<TModel, TEntity> modelsMappingService) : base(entityRepository, modelsMappingService)
         {
+            EntityRepository = entityRepository;
         }
 
         public async Task<TModel> GetAsync(TId id, bool trackable = false)
