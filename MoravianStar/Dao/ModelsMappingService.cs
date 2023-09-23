@@ -15,7 +15,7 @@ namespace MoravianStar.Dao
         {
             foreach (var pair in pairs)
             {
-                pair.Model = await MapAsync(pair.Projection);
+                pair.Model = pair.Projection is TEntity ? await MapAsync(pair.Projection as TEntity) : await MapAsync(pair.Projection);
             }
 
             return pairs;
