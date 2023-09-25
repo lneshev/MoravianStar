@@ -88,15 +88,6 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A service provider was not set. Please set a service provider using: &quot;Settings.ServiceProvider = app.ApplicationServices;&quot; when the application starts..
-        /// </summary>
-        public static string AServiceProviderWasNotSet {
-            get {
-                return ResourceManager.GetString("AServiceProviderWasNotSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A sorting field is either null or empty..
         /// </summary>
         public static string ASortingFieldIsEitherNullOrEmpty {
@@ -138,6 +129,15 @@ namespace MoravianStar.Resources {
         public static string SavingDataToDBWithoutATransactionIsNotAllowed {
             get {
                 return ResourceManager.GetString("SavingDataToDBWithoutATransactionIsNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ServiceLocator was not initialized. Please initialize it with the correct ServiceProvider..
+        /// </summary>
+        public static string ServiceLocatorWasNotInitialized {
+            get {
+                return ResourceManager.GetString("ServiceLocatorWasNotInitialized", resourceCulture);
             }
         }
         

@@ -126,9 +126,6 @@
   <data name="AnotherTransactionHasAlreadyStarted" xml:space="preserve">
     <value>Another transaction has already started. Either commit or rollback it before beginning a new transaction.</value>
   </data>
-  <data name="AServiceProviderWasNotSet" xml:space="preserve">
-    <value>A service provider was not set. Please set a service provider using: "Settings.ServiceProvider = app.ApplicationServices;" when the application starts.</value>
-  </data>
   <data name="ASortingFieldIsEitherNullOrEmpty" xml:space="preserve">
     <value>A sorting field is either null or empty.</value>
   </data>
@@ -143,6 +140,9 @@
   </data>
   <data name="SavingDataToDBWithoutATransactionIsNotAllowed" xml:space="preserve">
     <value>Saving data to a database without a transaction is not allowed. First open a database transaction and then save&amp;commit the changes.</value>
+  </data>
+  <data name="ServiceLocatorWasNotInitialized" xml:space="preserve">
+    <value>ServiceLocator was not initialized. Please initialize it with the correct ServiceProvider.</value>
   </data>
   <data name="TheSpecifiedTypeIsNotAnEnum" xml:space="preserve">
     <value>The specified type is not an enum.</value>

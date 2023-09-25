@@ -3,19 +3,31 @@ using System;
 
 namespace MoravianStar.DependencyInjection
 {
-    public class ServiceLocator
+    public class ServiceLocator : IDisposable
     {
+        private static IServiceProvider container { get; set; }
+
+        public ServiceLocator(IServiceProvider serviceProvider)
+        {
+            container = serviceProvider;
+        }
+
+        public IServiceProvider ServiceProvider { get; }
+
+        public void Dispose()
+        {
+            container = null;
+        }
+
         public static IServiceProvider Container
         {
             get
             {
-                var serviceProvider = Settings.Settings.ServiceProvider;
-                if (serviceProvider == null)
+                if (container == null)
                 {
-                    throw new ArgumentNullException(nameof(Settings.Settings.ServiceProvider), Strings.AServiceProviderWasNotSet);
+                    throw new InvalidOperationException(Strings.ServiceLocatorWasNotInitialized);
                 }
-
-                return serviceProvider;
+                return container;
             }
         }
     }
