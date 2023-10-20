@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Execution.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MoravianStar.WebAPI.GraphQL.Validation
+namespace MoravianStar.GraphQL.Validation
 {
     public static class RegisterValidatorMiddleware
     {

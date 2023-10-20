@@ -1,6 +1,5 @@
 ﻿using HotChocolate;
 using HotChocolate.Resolvers;
-using MoravianStar.GraphQL.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using IInputField = HotChocolate.Types.IInputField;
 
-namespace MoravianStar.WebAPI.GraphQL.Validation
+namespace MoravianStar.GraphQL.Validation
 {
     public class ValidatorMiddleware
     {

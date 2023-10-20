@@ -1,11 +1,10 @@
 ﻿using HotChocolate.Configuration;
 using HotChocolate.Types.Descriptors.Definitions;
-using MoravianStar.GraphQL.Validation;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace MoravianStar.WebAPI.GraphQL.Validation
+namespace MoravianStar.GraphQL.Validation
 {
     public class ValidatorTypeInterceptor : TypeInterceptor
     {

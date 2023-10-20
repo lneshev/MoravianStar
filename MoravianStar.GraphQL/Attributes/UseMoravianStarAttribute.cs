@@ -3,7 +3,7 @@ using HotChocolate.Types.Descriptors;
 using MoravianStar.DependencyInjection;
 using System.Reflection;
 
-namespace MoravianStar.WebAPI.GraphQL.Attributes
+namespace MoravianStar.GraphQL.Attributes
 {
     public class UseMoravianStarAttribute : ObjectFieldDescriptorAttribute
     {

@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Types;
 using MoravianStar.DependencyInjection;
 
-namespace MoravianStar.WebAPI.GraphQL.Extensions
+namespace MoravianStar.GraphQL.Extensions
 {
     public static class MoravianStarObjectFieldDescriptorExtensions
     {

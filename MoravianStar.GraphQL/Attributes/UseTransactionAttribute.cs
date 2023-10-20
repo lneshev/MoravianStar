@@ -5,7 +5,7 @@ using MoravianStar.Dao;
 using System;
 using System.Reflection;
 
-namespace MoravianStar.WebAPI.GraphQL.Attributes
+namespace MoravianStar.GraphQL.Attributes
 {
     public class UseTransactionAttribute : ObjectFieldDescriptorAttribute
     {
