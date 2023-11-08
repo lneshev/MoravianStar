@@ -48,6 +48,15 @@ namespace MoravianStar.Dao
             }
         }
 
+        public void Dispose()
+        {
+            if (dbContextTransaction != null)
+            {
+                dbContextTransaction.Dispose();
+                dbContextTransaction = null;
+            }
+        }
+
         public async ValueTask DisposeAsync()
         {
             if (dbContextTransaction != null)

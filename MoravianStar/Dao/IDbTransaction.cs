@@ -10,7 +10,7 @@ namespace MoravianStar.Dao
         TDbContext DbContext { get; }
     }
 
-    public interface IDbTransaction : IAsyncDisposable
+    public interface IDbTransaction : IDisposable, IAsyncDisposable
     {
         Task BeginAsync();
         Task CommitAsync();
