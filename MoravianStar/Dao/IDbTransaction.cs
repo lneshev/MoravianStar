@@ -16,6 +16,10 @@ namespace MoravianStar.Dao
         Task CommitAsync();
         Task RollbackAsync();
 
+        void Begin();
+        void Commit();
+        void Rollback();
+
         event EventHandler Committing;
         event EventHandler Committed;
     }

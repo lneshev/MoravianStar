@@ -18,6 +18,15 @@ namespace MoravianStar.Dao
 
         public TDbContext DbContext { get; }
 
+        public void Begin()
+        {
+            if (dbContextTransaction != null)
+            {
+                throw new InvalidOperationException(Strings.AnotherTransactionHasAlreadyStarted);
+            }
+            dbContextTransaction = DbContext.Database.BeginTransaction();
+        }
+
         public async Task BeginAsync()
         {
             if (dbContextTransaction != null)
@@ -27,15 +36,36 @@ namespace MoravianStar.Dao
             dbContextTransaction = await DbContext.Database.BeginTransactionAsync();
         }
 
-        public async Task CommitAsync()
+        public void Commit()
         {
             if (dbContextTransaction != null)
             {
                 DbContext.SaveChanges();
                 OnCommiting(EventArgs.Empty);
+                dbContextTransaction.Commit();
+                OnCommitted(EventArgs.Empty);
+                Dispose();
+            }
+        }
+
+        public async Task CommitAsync()
+        {
+            if (dbContextTransaction != null)
+            {
+                await DbContext.SaveChangesAsync();
+                OnCommiting(EventArgs.Empty);
                 await dbContextTransaction.CommitAsync();
                 OnCommitted(EventArgs.Empty);
                 await DisposeAsync();
+            }
+        }
+
+        public void Rollback()
+        {
+            if (dbContextTransaction != null)
+            {
+                dbContextTransaction.Rollback();
+                Dispose();
             }
         }
 
