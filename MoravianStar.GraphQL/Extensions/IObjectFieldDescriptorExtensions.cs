@@ -3,9 +3,9 @@ using MoravianStar.DependencyInjection;
 
 namespace MoravianStar.GraphQL.Extensions
 {
-    public static class ServiceLocatorObjectFieldDescriptorExtensions
+    public static class IObjectFieldDescriptorExtensions
     {
-        public static IObjectFieldDescriptor UseMoravianStar(this IObjectFieldDescriptor descriptor)
+        public static IObjectFieldDescriptor UseServiceLocator(this IObjectFieldDescriptor descriptor)
         {
             descriptor.Extend().Definition.MiddlewareDefinitions.Add(new(next => async context =>
             {
