@@ -1,33 +1,30 @@
 ﻿using MoravianStar.Resources;
 using System;
+using System.Threading;
 
 namespace MoravianStar.DependencyInjection
 {
-    public class ServiceLocator : IDisposable
+    public class ServiceLocator
     {
-        private static IServiceProvider container { get; set; }
+        private static AsyncLocal<IServiceProvider> container { get; set; }
 
-        public ServiceLocator(IServiceProvider serviceProvider)
+        public ServiceLocator(IServiceProvider scopedServiceProvider)
         {
-            container = serviceProvider;
-        }
-
-        public IServiceProvider ServiceProvider { get; }
-
-        public void Dispose()
-        {
-            container = null;
+            container = new AsyncLocal<IServiceProvider>()
+            {
+                Value = scopedServiceProvider
+            };
         }
 
         public static IServiceProvider Container
         {
             get
             {
-                if (container == null)
+                if (container == null || container.Value == null)
                 {
                     throw new InvalidOperationException(Strings.ServiceLocatorWasNotInitialized);
                 }
-                return container;
+                return container.Value;
             }
         }
     }
