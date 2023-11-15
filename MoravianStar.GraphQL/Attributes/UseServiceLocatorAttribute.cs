@@ -11,7 +11,7 @@ namespace MoravianStar.GraphQL.Attributes
         {
             descriptor.Extend().Definition.MiddlewareDefinitions.Add(new(next => async context =>
             {
-                new ServiceLocator(context.Services);
+                new ServiceLocator(() => context.Services);
                 await next(context);
             }));
         }
