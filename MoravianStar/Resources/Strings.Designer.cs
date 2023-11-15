@@ -133,7 +133,7 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ServiceLocator was not initialized. Please initialize it with the correct ServiceProvider..
+        ///   Looks up a localized string similar to ServiceLocator was not initialized. Please initialize it with a function that returns the correct scoped (request) service provider..
         /// </summary>
         public static string ServiceLocatorWasNotInitialized {
             get {

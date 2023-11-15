@@ -142,7 +142,7 @@
     <value>Saving data to a database without a transaction is not allowed. First open a database transaction and then save&amp;commit the changes.</value>
   </data>
   <data name="ServiceLocatorWasNotInitialized" xml:space="preserve">
-    <value>ServiceLocator was not initialized. Please initialize it with the correct ServiceProvider.</value>
+    <value>ServiceLocator was not initialized. Please initialize it with a function that returns the correct scoped (request) service provider.</value>
   </data>
   <data name="TheSpecifiedTypeIsNotAnEnum" xml:space="preserve">
     <value>The specified type is not an enum.</value>
