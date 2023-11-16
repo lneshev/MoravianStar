@@ -20,7 +20,7 @@ namespace MoravianStar.Dao
 
         public void Begin()
         {
-            if (dbContextTransaction != null)
+            if (dbContextTransaction != null || DbContext.Database.CurrentTransaction != null)
             {
                 throw new InvalidOperationException(Strings.AnotherTransactionHasAlreadyStarted);
             }
@@ -29,7 +29,7 @@ namespace MoravianStar.Dao
 
         public async Task BeginAsync()
         {
-            if (dbContextTransaction != null)
+            if (dbContextTransaction != null || DbContext.Database.CurrentTransaction != null)
             {
                 throw new InvalidOperationException(Strings.AnotherTransactionHasAlreadyStarted);
             }
