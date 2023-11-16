@@ -18,7 +18,7 @@ namespace MoravianStar.WebAPI.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            new ServiceLocator(context.RequestServices);
+            new ServiceLocator(() => context.RequestServices);
             await next(context);
         }
     }

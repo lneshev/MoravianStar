@@ -6,25 +6,22 @@ namespace MoravianStar.DependencyInjection
 {
     public class ServiceLocator
     {
-        private static AsyncLocal<IServiceProvider> container { get; set; }
+        private static readonly AsyncLocal<Func<IServiceProvider>> func = new AsyncLocal<Func<IServiceProvider>>();
 
-        public ServiceLocator(IServiceProvider scopedServiceProvider)
+        public ServiceLocator(Func<IServiceProvider> scopedServiceProviderFunc)
         {
-            container = new AsyncLocal<IServiceProvider>()
-            {
-                Value = scopedServiceProvider
-            };
+            func.Value = scopedServiceProviderFunc;
         }
 
         public static IServiceProvider Container
         {
             get
             {
-                if (container == null || container.Value == null)
+                if (func.Value == null)
                 {
                     throw new InvalidOperationException(Strings.ServiceLocatorWasNotInitialized);
                 }
-                return container.Value;
+                return func.Value();
             }
         }
     }
