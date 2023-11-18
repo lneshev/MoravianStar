@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using MoravianStar.WebAPI.Extensions;
 using System;
-using System.Threading.Tasks;
 
 namespace MoravianStar.WebAPI.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class ElmahRaiseLogAsyncAttribute : Attribute, IAsyncActionFilter
+    public class ElmahRaiseLogAttribute : ActionFilterAttribute
     {
-        public ElmahRaiseLogAsyncAttribute(string message = null, bool raiseOnError = false)
+        public ElmahRaiseLogAttribute(string message = null, bool raiseOnError = false)
         {
             Message = message;
             RaiseOnError = raiseOnError;
@@ -17,10 +16,11 @@ namespace MoravianStar.WebAPI.Attributes
         public string Message { get; }
         public bool RaiseOnError { get; }
 
-        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public override void OnResultExecuted(ResultExecutedContext context)
         {
-            var executedContext = await next();
-            if (executedContext.Exception == null || RaiseOnError)
+            base.OnResultExecuted(context);
+
+            if (context.Exception == null || RaiseOnError)
             {
                 ElmahExtensions.RaiseLog(Message);
             }
