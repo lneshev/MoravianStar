@@ -21,7 +21,7 @@ namespace MoravianStar.GraphQL.Attributes
 
         public Type DbContextType { get; }
 
-        public override void OnConfigure(IDescriptorContext context, IObjectFieldDescriptor descriptor, MemberInfo member)
+        protected override void OnConfigure(IDescriptorContext context, IObjectFieldDescriptor descriptor, MemberInfo member)
         {
             descriptor.Extend().Definition.MiddlewareDefinitions.Add(new(next => async context =>
             {
