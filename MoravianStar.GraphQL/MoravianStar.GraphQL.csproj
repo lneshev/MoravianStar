@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DataAnnotatedModelValidations" Version="5.1.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="13.7.0" />
   </ItemGroup>
 
