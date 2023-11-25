@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MoravianStar.WebAPI.Extensions;
+using MoravianStar.Extensions;
 using MoravianStar.WebAPI.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;

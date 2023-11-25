@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Security;
 
-namespace MoravianStar.WebAPI.Extensions
+namespace MoravianStar.Extensions
 {
     public static class ExceptionExtensions
     {
