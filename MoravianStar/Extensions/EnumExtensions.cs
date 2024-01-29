@@ -11,11 +11,9 @@ namespace MoravianStar.Extensions
     {
         public static List<EnumNameValue> AllEnumsAsJson()
         {
-            var enumTypes = Assembly.GetExecutingAssembly()
-                                   .GetTypes()
-                                   .Where(x => x.IsEnum);
-
             var results = new List<EnumNameValue>();
+
+            var enumTypes = GetAllEnumTypes();
 
             foreach (var enumType in enumTypes)
             {
@@ -52,10 +50,11 @@ namespace MoravianStar.Extensions
 
             var result = new List<EnumTextValue>();
 
-            var enumType = Assembly.GetExecutingAssembly()
-                                   .GetTypes()
-                                   .Where(x => x.IsEnum && x.Name == enumName)
-                                   .Single();
+            var enumType = GetAllEnumTypes().SingleOrDefault(x => x.Name == enumName);
+            if (enumType == null)
+            {
+                throw new InvalidOperationException(string.Format(Strings.AnEnumWithNameDoesNotExist, enumName));
+            }
 
             var values = Enum.GetValues(enumType);
 
@@ -91,7 +90,7 @@ namespace MoravianStar.Extensions
             {
                 throw new ArgumentException(Strings.TheSpecifiedTypeIsNotAnEnum, nameof(TEnum));
             }
-
+            
             return Translate((object)enumValue, stringResourceType);
         }
 
@@ -104,6 +103,21 @@ namespace MoravianStar.Extensions
             }
 
             return values.Length > 0 && values.Contains(enumValue);
+        }
+
+        private static IEnumerable<Type> GetAllEnumTypes()
+        {
+            var moravianStarEnumTypes = Assembly.GetExecutingAssembly()
+                                   .GetTypes()
+                                   .Where(x => x.IsEnum)
+                                   .OrderBy(x => x.Name);
+
+            var dependentProjectEnumTypes = Assembly.GetAssembly(Settings.Settings.AssemblyForEnums.GetType())
+                .GetTypes()
+                .Where(x => x.IsEnum)
+                .OrderBy(x => x.Name);
+
+            return moravianStarEnumTypes.Concat(dependentProjectEnumTypes);
         }
 
         private static string Translate(object enumValue, Type stringResourceType)

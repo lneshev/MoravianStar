@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace MoravianStar.Settings
 {
@@ -6,5 +7,6 @@ namespace MoravianStar.Settings
     {
         public static Type DefaultDbContextType { get; set; }
         public static Type StringResourceTypeForEnums { get; set; }
+        public static Assembly AssemblyForEnums { get; set; }
     }
 }

@@ -79,6 +79,15 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An enum with name: &apos;{0}&apos;, doesn&apos;t exist..
+        /// </summary>
+        public static string AnEnumWithNameDoesNotExist {
+            get {
+                return ResourceManager.GetString("AnEnumWithNameDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Another transaction has already started. Either commit or rollback it before beginning a new transaction..
         /// </summary>
         public static string AnotherTransactionHasAlreadyStarted {
