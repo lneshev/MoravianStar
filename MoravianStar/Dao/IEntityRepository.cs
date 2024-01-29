@@ -10,6 +10,7 @@ namespace MoravianStar.Dao
     /// <summary>
     /// Provides access to the data layer via the repository pattern.
     /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TDbContext">The type of the DbContext.</typeparam>
     public interface IEntityRepository<TEntity, TDbContext>
         where TEntity : class, IEntityBase
@@ -62,6 +63,7 @@ namespace MoravianStar.Dao
         /// <param name="page">The page object used for paging.</param>
         /// <param name="includes">Allows modifying the query to add the necessary includes (aka the SQL joins). See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager"/>.</param>
         /// <param name="trackable">Specifies whether the query should be trackable or not. See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/tracking"/>.</param>
+        /// <param name="getTotalCount">Specifies whether an additional DB request to be initiated to get the total number of records for the same filter, but not taking into account the paging.</param>
         /// <returns>An <see cref="IEnumerable{TEntity}"/> of the found entities.</returns>
         Task<PageResult<TEntity>> ReadAsync<TFilter>(
             TFilter filter = null,
@@ -82,6 +84,7 @@ namespace MoravianStar.Dao
         /// <param name="page">The page object used for paging.</param>
         /// <param name="projection">Allows setting the resulting projection.</param>
         /// <param name="trackable">Specifies whether the query should be trackable or not. See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/tracking"/>.</param>
+        /// <param name="getTotalCount">Specifies whether an additional DB request to be initiated to get the total number of records for the same filter, but not taking into account the paging.</param>
         /// <returns>An <see cref="IEnumerable{TProjection}"/> of the found entities.</returns>
         Task<PageResult<TProjection>> ReadAsync<TFilter, TProjection>(
             TFilter filter = null,
@@ -96,7 +99,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Asynchronously counts entities, optionally by a filter.
         /// </summary>
-        /// <typeparam name="TEntity">The type of the entity being count.</typeparam>
         /// <typeparam name="TFilter">The type of the filter being used for counting.</typeparam>
         /// <param name="filter">The <see cref="FilterSorterBase{TEntity}"/> instance used for filtering.</param>
         /// <returns>The number of the found entities.</returns>
@@ -112,18 +114,25 @@ namespace MoravianStar.Dao
         Task<bool> ExistAsync<TFilter>(TFilter filter = null)
             where TFilter : FilterSorterBase<TEntity>, new();
 
+        /// <summary>
+        /// Asynchronously saves (creates or updates) an entity.
+        /// </summary>
+        /// <param name="entity">The entity that is going to be saved.</param>
+        /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntitySaving{TEntity}"/> and so on.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         Task SaveAsync(TEntity entity, IDictionary<string, object> additionalParameters = null);
 
         /// <summary>
-        /// Begins tracking the given entity such that it will be removed from the database when <see cref="SaveChangesAsync"/> is called.
+        /// Asynchronously deletes an entity.
         /// </summary>
-        /// <typeparam name="TEntity">The type of the entity being deleted.</typeparam>
-        /// <param name="entity">The entity to delete.</param>
-        Task<TEntity> DeleteAsync(TEntity entity, IDictionary<string, object> additionalParameters = null);
+        /// <param name="entity">The entity that is going to be deleted.</param>
+        /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntityDeleting{TEntity}"/> and so on.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        Task DeleteAsync(TEntity entity, IDictionary<string, object> additionalParameters = null);
     }
 
-    /// <inheritdoc cref="IEntityRepository"/>
-    /// <typeparam name="TDbContext">The type of the DbContext.</typeparam>
+    /// <inheritdoc cref="IEntityRepository{TEntity, TDbContext}"/>
+    /// <typeparam name="TId">The type of entity's ID.</typeparam>
     public interface IEntityRepository<TEntity, TId, TDbContext> : IEntityRepository<TEntity, TDbContext>
         where TEntity: class, IEntityBase<TId>
         where TDbContext : DbContext
@@ -157,8 +166,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Creates and asynchronously executes a query that can get entity by Id.
         /// </summary>
-        /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
-        /// <typeparam name="TId">The type of the Id of the entity being queried.</typeparam>
         /// <param name="id">The target Id.</param>
         /// <param name="includes">Allows modifying the query to add the necessary includes (aka the SQL joins). See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/related-data/eager"/>.</param>
         /// <param name="trackable">Specifies whether the query should be trackable or not. See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/tracking"/>.</param>
@@ -171,8 +178,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Creates and asynchronously executes a query that can get entity by Id.
         /// </summary>
-        /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
-        /// <typeparam name="TId">The type of the Id of the entity being queried.</typeparam>
         /// <typeparam name="TProjection">The type of the resulting projection.</typeparam>
         /// <param name="id">The target Id.</param>
         /// <param name="projection">Allows setting the resulting projection.</param>
@@ -185,9 +190,10 @@ namespace MoravianStar.Dao
             where TProjection : class, IProjectionBase;
 
         /// <summary>
-        /// Finds an entity of type <typeparamref name="TEntity"/> by Id and begins tracking it such that it will be removed from the database when <see cref="SaveChangesAsync"/> is called.
+        /// Asynchronously deletes an entity by Id.
         /// </summary>
-        /// <param name="id">The target Id.</param>
+        /// <param name="id">The Id of the entity that is going to be deleted.</param>
+        /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntityDeleting{TEntity}"/> and so on.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         Task DeleteAsync(TId id, IDictionary<string, object> additionalParameters = null);
     }

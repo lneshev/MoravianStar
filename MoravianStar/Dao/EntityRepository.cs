@@ -130,7 +130,7 @@ namespace MoravianStar.Dao
             ServiceLocator.Container.GetServices<IEntitySaved<TEntity>>().ToList().ForEach(async (IEntitySaved<TEntity> x) => await x.SavedAsync(entity, originalEntity, entityIsNew, additionalParameters));
         }
 
-        public async Task<TEntity> DeleteAsync(TEntity entity, IDictionary<string, object> additionalParameters = null)
+        public async Task DeleteAsync(TEntity entity, IDictionary<string, object> additionalParameters = null)
         {
             if (entity == null)
             {
@@ -148,8 +148,6 @@ namespace MoravianStar.Dao
             await dbTransaction.DbContext.SaveChangesAsync();
 
             ServiceLocator.Container.GetServices<IEntityDeleted<TEntity>>().ToList().ForEach(async (IEntityDeleted<TEntity> x) => await x.DeletedAsync(entity, additionalParameters));
-
-            return entity;
         }
 
         private async Task<TEntity> GetOriginalEntityAsync(TEntity entity, IDictionary<string, object> additionalParameters)
