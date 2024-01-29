@@ -70,6 +70,15 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An assembly for enums was not set. Please set an assembly for enums using: &quot;Settings.AssemblyForEnums = YourAssembly&quot; when the application starts..
+        /// </summary>
+        public static string AnAssemblyForEnumsWasNotSet {
+            get {
+                return ResourceManager.GetString("AnAssemblyForEnumsWasNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An entity of type: &apos;{0}&apos; with ID: &apos;{1}&apos; was not found..
         /// </summary>
         public static string AnEntityOfTypeWithIdWasNotFound {

@@ -107,12 +107,18 @@ namespace MoravianStar.Extensions
 
         private static IEnumerable<Type> GetAllEnumTypes()
         {
+            var dependentProjectAssemblyForEnums = Settings.Settings.AssemblyForEnums;
+            if (dependentProjectAssemblyForEnums == null)
+            {
+                throw new ArgumentNullException(nameof(Settings.Settings.AssemblyForEnums), Strings.AnAssemblyForEnumsWasNotSet);
+            }
+
             var moravianStarEnumTypes = Assembly.GetExecutingAssembly()
                                    .GetTypes()
                                    .Where(x => x.IsEnum)
                                    .OrderBy(x => x.Name);
 
-            var dependentProjectEnumTypes = Assembly.GetAssembly(Settings.Settings.AssemblyForEnums.GetType())
+            var dependentProjectEnumTypes = dependentProjectAssemblyForEnums
                 .GetTypes()
                 .Where(x => x.IsEnum)
                 .OrderBy(x => x.Name);
