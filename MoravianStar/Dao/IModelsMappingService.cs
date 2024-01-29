@@ -10,8 +10,7 @@ namespace MoravianStar.Dao
         where TModel : class, IModelBase
         where TEntity : class, IEntityBase
     {
-        Task<List<ProjectionModelPair<TProjection, TModel>>> ToModels<TProjection>(List<ProjectionModelPair<TProjection, TModel>> pairs)
-            where TProjection : class, IProjectionBase;
+        Task<List<ProjectionModelPair<IProjectionBase, TModel>>> ToModels(List<ProjectionModelPair<IProjectionBase, TModel>> pairs);
 
         Task<List<EntityModelPair<TEntity, TModel>>> ToEntities(List<EntityModelPair<TEntity, TModel>> pairs);
 

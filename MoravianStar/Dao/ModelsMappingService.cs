@@ -10,8 +10,7 @@ namespace MoravianStar.Dao
         where TModel : class, IModelBase
         where TEntity : class, IEntityBase
     {
-        public virtual async Task<List<ProjectionModelPair<TProjection, TModel>>> ToModels<TProjection>(List<ProjectionModelPair<TProjection, TModel>> pairs)
-            where TProjection : class, IProjectionBase
+        public virtual async Task<List<ProjectionModelPair<IProjectionBase, TModel>>> ToModels(List<ProjectionModelPair<IProjectionBase, TModel>> pairs)
         {
             foreach (var pair in pairs)
             {

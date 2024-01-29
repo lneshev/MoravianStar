@@ -69,9 +69,9 @@ namespace MoravianStar.Dao
 
             await EntityRepository.SaveAsync(entity, additionalParameters);
 
-            model = (await modelsMappingService.ToModels(new List<ProjectionModelPair<TEntity, TModel>>()
+            model = (await modelsMappingService.ToModels(new List<ProjectionModelPair<IProjectionBase, TModel>>()
             {
-                new ProjectionModelPair<TEntity, TModel>()
+                new ProjectionModelPair<IProjectionBase, TModel>()
                 {
                     Projection = entity,
                     Model = new TModel(),
@@ -136,9 +136,9 @@ namespace MoravianStar.Dao
 
             await EntityRepository.SaveAsync(entity, additionalParameters);
 
-            var newModel = (await modelsMappingService.ToModels(new List<ProjectionModelPair<TEntity, TModel>>()
+            var newModel = (await modelsMappingService.ToModels(new List<ProjectionModelPair<IProjectionBase, TModel>>()
             {
-                new ProjectionModelPair<TEntity, TModel>()
+                new ProjectionModelPair<IProjectionBase, TModel>()
                 {
                     Projection = entity,
                     Model = new TModel()
@@ -152,9 +152,9 @@ namespace MoravianStar.Dao
         {
             var entity = await EntityRepository.GetAsync(id, modelsMappingService.GetIncludes);
 
-            var model = (await modelsMappingService.ToModels(new List<ProjectionModelPair<TEntity, TModel>>()
+            var model = (await modelsMappingService.ToModels(new List<ProjectionModelPair<IProjectionBase, TModel>>()
             {
-                new ProjectionModelPair<TEntity, TModel>()
+                new ProjectionModelPair<IProjectionBase, TModel>()
                 {
                     Projection = entity,
                     Model = new TModel()
