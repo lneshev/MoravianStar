@@ -15,6 +15,9 @@ namespace MoravianStar.Dao
         where TEntity : class, IEntityBase
         where TDbContext : DbContext
     {
+        /// <summary>
+        /// The EntityRepository instance that will be called internally
+        /// </summary>
         public IEntityRepository<TEntity, TDbContext> EntityRepository { get; }
 
         /// <summary>
@@ -53,6 +56,7 @@ namespace MoravianStar.Dao
         /// </summary>
         /// <param name="repository">The repository that is used to create the entity.</param>
         /// <param name="model">The model containing the input data of the entity, that will be created.</param>
+        /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntitySaving{TEntity}"/> and so on.</param>
         /// <returns>The model containing the input data. The model might be modified by the logic.</returns>
         Task<TModel> CreateAsync(TModel model, IDictionary<string, object> additionalParameters = null);
     }
@@ -85,6 +89,7 @@ namespace MoravianStar.Dao
         /// </summary>
         /// <param name="repository">The repository that is used to update the entity.</param>
         /// <param name="model">The model containing the input data of the entity, that will be updated.</param>
+        /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntitySaving{TEntity}"/> and so on.</param>
         /// <returns>The model containing the input data. The model might be modified by the logic.</returns>
         Task<TModel> UpdateAsync(TModel model, IDictionary<string, object> additionalParameters = null);
 
@@ -93,6 +98,7 @@ namespace MoravianStar.Dao
         /// </summary>
         /// <param name="repository">The repository that is used to delete the entity.</param>
         /// <param name="id">The target Id.</param>
+        /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntityDeleting{TEntity}"/> and so on.</param>
         /// <returns><see langword="True"/> if the delete operation is successful, otherwise <see langword="false"/>.</returns>
         Task<TModel> DeleteAsync(TId id, IDictionary<string, object> additionalParameters = null);
     }

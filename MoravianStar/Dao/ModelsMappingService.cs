@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MoravianStar.Dao
 {
+    /// <inheritdoc cref="IModelsMappingService{TModel, TEntity}"/>
     public abstract class ModelsMappingService<TModel, TEntity> : IModelsMappingService<TModel, TEntity>
         where TModel : class, IModelBase
         where TEntity : class, IEntityBase
