@@ -7,11 +7,14 @@ namespace MoravianStar.WebAPI.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
-        public static void UseMoravianStar(this IApplicationBuilder app, IWebHostEnvironment env, Action additionalSettings)
+        public static void UseMoravianStar(this IApplicationBuilder app, IWebHostEnvironment env, Action additionalSettings = null)
         {
             app.UseMiddleware<ServiceLocatorMiddleware>();
             app.UseMiddleware<ExceptionMiddleware>(env);
-            additionalSettings();
+            if (additionalSettings != null)
+            {
+                additionalSettings();
+            }
         }
     }
 }
