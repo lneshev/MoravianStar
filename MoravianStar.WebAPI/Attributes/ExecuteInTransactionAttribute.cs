@@ -9,34 +9,44 @@ namespace MoravianStar.WebAPI.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class ExecuteInTransactionAsyncAttribute : Attribute, IAsyncActionFilter
     {
-        public ExecuteInTransactionAsyncAttribute()
+        public ExecuteInTransactionAsyncAttribute(bool isEnabled = true)
         {
             DbContextType = Persistence.DefaultDbContextType;
+            IsEnabled = isEnabled;
         }
 
         public ExecuteInTransactionAsyncAttribute(Type dbContextType)
         {
             DbContextType = dbContextType;
+            IsEnabled = true;
         }
 
         public Type DbContextType { get; }
+        public bool IsEnabled { get; }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var serviceType = typeof(IDbTransaction<>).MakeGenericType(DbContextType);
-            var dbTransaction = (IDbTransaction)context.HttpContext.RequestServices.GetRequiredService(serviceType);
-
-            await dbTransaction.BeginAsync();
-
-            var executedContext = await next();
-
-            if (executedContext.Exception == null)
+            if (IsEnabled)
             {
-                await dbTransaction.CommitAsync();
+                var serviceType = typeof(IDbTransaction<>).MakeGenericType(DbContextType);
+                var dbTransaction = (IDbTransaction)context.HttpContext.RequestServices.GetRequiredService(serviceType);
+
+                await dbTransaction.BeginAsync();
+
+                var executedContext = await next();
+
+                if (executedContext.Exception == null)
+                {
+                    await dbTransaction.CommitAsync();
+                }
+                else
+                {
+                    await dbTransaction.RollbackAsync();
+                }
             }
             else
             {
-                await dbTransaction.RollbackAsync();
+                await next();
             }
         }
     }
