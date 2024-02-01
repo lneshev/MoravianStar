@@ -9,7 +9,7 @@ namespace MoravianStar.WebAPI.Controllers
 {
     [ApiController]
     [Route(RoutingConstants.ApiController)]
-    public class EnumController : ControllerBase
+    public class EnumsController : ControllerBase
     {
         [HttpGet]
         public virtual ActionResult<List<EnumNameValue>> Get()
