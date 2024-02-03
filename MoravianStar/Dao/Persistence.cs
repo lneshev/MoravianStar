@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MoravianStar.DependencyInjection;
 using MoravianStar.Resources;
 using System;
+using System.Threading.Tasks;
 
 namespace MoravianStar.Dao
 {
@@ -62,7 +63,7 @@ namespace MoravianStar.Dao
 
     internal static class Test
     {
-        public static void TestMethod()
+        public static async Task TestMethod()
         {
             var a = Persistence.ForDbContext<TestContext>().DbContext;
             var b = Persistence.ForDbContext<TestContext>().DbTransaction;
@@ -71,10 +72,10 @@ namespace MoravianStar.Dao
             //var e = Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address>().DbContext;
             //var f = Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address, int>().DbContext;
 
-            Persistence.ForDbContext<TestContext>().ForEntity<Address>().ReadAsync<AddressFilter>();
-            Persistence.ForDbContext<TestContext>().ForEntity<Address, int>().GetAsync(1);
-            Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
-            Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address, int>().GetAsync(1);
+            await Persistence.ForDbContext<TestContext>().ForEntity<Address>().ReadAsync<AddressFilter>();
+            await Persistence.ForDbContext<TestContext>().ForEntity<Address, int>().GetAsync(1);
+            await Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
+            await Persistence.ForDbContext<TestContext>().ForModel<AddressModel, Address, int>().GetAsync(1);
 
             var g = Persistence.DefaultDbContextType;
             var h = Persistence.DefaultDbTransaction;
@@ -83,10 +84,10 @@ namespace MoravianStar.Dao
             //var k = Persistence.ForModel<AddressModel, Address>().DbContext;
             //var l = Persistence.ForModel<AddressModel, Address, int>().DbContext;
 
-            Persistence.ForEntity<Address>().ReadAsync<AddressFilter>();
-            Persistence.ForEntity<Address, int>().GetAsync(1);
-            Persistence.ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
-            Persistence.ForModel<AddressModel, Address, int>().GetAsync(1);
+            await Persistence.ForEntity<Address>().ReadAsync<AddressFilter>();
+            await Persistence.ForEntity<Address, int>().GetAsync(1);
+            await Persistence.ForModel<AddressModel, Address>().ReadAsync<AddressFilter>();
+            await Persistence.ForModel<AddressModel, Address, int>().GetAsync(1);
         }
     }
 

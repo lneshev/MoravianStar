@@ -7,8 +7,17 @@ using System.Security;
 
 namespace MoravianStar.Extensions
 {
+    /// <summary>
+    /// Extension methods that are related to operations with exceptions.
+    /// </summary>
     public static class ExceptionExtensions
     {
+        /// <summary>
+        /// Generates a correct HTTP status code for a given exception.
+        /// </summary>
+        /// <param name="exception">The source exception.</param>
+        /// <returns>An <see cref="int"/> value representing the HTTP status code.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static int GetHttpStatusCode(this Exception exception)
         {
             if (exception == null)
