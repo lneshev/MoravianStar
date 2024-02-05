@@ -1,3 +1,5 @@
+<center><img src="logo.png" width="100" height="100"></center>
+
 # Moravian Star
 
 ## The .NET library that helps you focus on writing business code rather than technical code!
@@ -917,6 +919,8 @@ Usually, the developer would write one and the same common logic for each entity
 So, Moravian Star is here to solve all the problems from the beginning by extracting the common logic and give the developer only the points where he/she can write the business logic.
 
 The major concept is presented in the following diagram:
+
+<img src="the-big-picture.jpg">
 
 On the left side we have the WebAPI controllers (or could be any other technology which connects the UI with the business logic) and to the right we have the SQL database. Usually between them is the business logic, written in some services, that uses the chosen ORM to communicate with the database. Here, again we have this ORM and for Moravian Star this is Entity Framework Core (EF Core). In theory, it could be any other like: nHibernate, Dapper or just ADO.NET, but EF Core was chosen as most modern, fast enough, well documented and continuously maintained and developed.
 
