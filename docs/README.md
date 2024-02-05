@@ -1,4 +1,6 @@
-<center><img src="logo.png" width="100" height="100"></center>
+<p align="center">
+    <img src="logo.png" width="100" height="100">
+</p>
 
 # Moravian Star
 
