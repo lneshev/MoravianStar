@@ -20,6 +20,9 @@ namespace MoravianStar.Exceptions
         {
         }
 
+#if NET8_0_OR_GREATER
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+#endif
         protected EntityNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

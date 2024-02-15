@@ -1,19 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <OpenApiGenerateDocumentsOnBuild>false</OpenApiGenerateDocumentsOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ElmahCore" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.27" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.16" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.27" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MoravianStar\MoravianStar.csproj" />
   </ItemGroup>
-
+  
 </Project>
