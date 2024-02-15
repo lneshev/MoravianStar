@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoravianStar", "MoravianSta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoravianStar.WebAPI", "MoravianStar.WebAPI\MoravianStar.WebAPI.csproj", "{58E32114-182D-4B8C-BF07-B8422A3223FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoravianStar.GraphQL", "MoravianStar.GraphQL\MoravianStar.GraphQL.csproj", "{9BC6196E-30BA-41E6-9464-CDBC78909C24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoravianStar.GraphQL", "MoravianStar.GraphQL\MoravianStar.GraphQL.csproj", "{9BC6196E-30BA-41E6-9464-CDBC78909C24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
