@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoravianStar.Dao
 {
@@ -9,6 +10,7 @@ namespace MoravianStar.Dao
     public abstract class EntityBase<TId> : IEntityBase<TId>, IProjectionBase<TId>
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual TId Id { get; set; }
 
         public virtual bool IsNew()
