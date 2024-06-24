@@ -111,9 +111,9 @@ namespace MoravianStar.Dao
 
             TEntity originalEntity = await GetOriginalEntityAsync(entity, additionalParameters);
 
-            ValidateAsync(entity, originalEntity, additionalParameters);
+            await ValidateAsync(entity, originalEntity, additionalParameters);
 
-            ServiceLocator.Container.GetServices<IEntitySaving<TEntity>>().ToList().ForEach(async (IEntitySaving<TEntity> x) => await x.SavingAsync(entity, originalEntity, additionalParameters));
+            await ExecuteHandlersAsync<IEntitySaving<TEntity>>(x => x.SavingAsync(entity, originalEntity, additionalParameters));
 
             bool entityIsNew = entity.IsNew();
             if (entityIsNew)
@@ -127,7 +127,7 @@ namespace MoravianStar.Dao
 
             await dbTransaction.DbContext.SaveChangesAsync();
 
-            ServiceLocator.Container.GetServices<IEntitySaved<TEntity>>().ToList().ForEach(async (IEntitySaved<TEntity> x) => await x.SavedAsync(entity, originalEntity, entityIsNew, additionalParameters));
+            await ExecuteHandlersAsync<IEntitySaved<TEntity>>(x => x.SavedAsync(entity, originalEntity, entityIsNew, additionalParameters));
         }
 
         public async Task DeleteAsync(TEntity entity, IDictionary<string, object> additionalParameters = null)
@@ -142,12 +142,12 @@ namespace MoravianStar.Dao
                 additionalParameters = new Dictionary<string, object>();
             }
 
-            ServiceLocator.Container.GetServices<IEntityDeleting<TEntity>>().ToList().ForEach(async (IEntityDeleting<TEntity> x) => await x.DeletingAsync(entity, additionalParameters));
+            await ExecuteHandlersAsync<IEntityDeleting<TEntity>>(x => x.DeletingAsync(entity, additionalParameters));
 
             entity = dbTransaction.DbContext.Remove(entity).Entity;
             await dbTransaction.DbContext.SaveChangesAsync();
 
-            ServiceLocator.Container.GetServices<IEntityDeleted<TEntity>>().ToList().ForEach(async (IEntityDeleted<TEntity> x) => await x.DeletedAsync(entity, additionalParameters));
+            await ExecuteHandlersAsync<IEntityDeleted<TEntity>>(x => x.DeletedAsync(entity, additionalParameters));
         }
 
         private async Task<TEntity> GetOriginalEntityAsync(TEntity entity, IDictionary<string, object> additionalParameters)
@@ -168,14 +168,23 @@ namespace MoravianStar.Dao
             }
         }
 
-        private void ValidateAsync(TEntity entity, TEntity originalEntity, IDictionary<string, object> additionalParameters)
+        private async Task ValidateAsync(TEntity entity, TEntity originalEntity, IDictionary<string, object> additionalParameters)
         {
-            ServiceLocator.Container.GetServices<IEntityValidating<TEntity>>().ToList().ForEach(async (IEntityValidating<TEntity> x) => await x.ValidatingAsync(entity, originalEntity, additionalParameters));
+            await ExecuteHandlersAsync<IEntityValidating<TEntity>>(x => x.ValidatingAsync(entity, originalEntity, additionalParameters));
 
             var validationContext = new ValidationContext(entity);
             Validator.ValidateObject(entity, validationContext, true);
 
-            ServiceLocator.Container.GetServices<IEntityValidated<TEntity>>().ToList().ForEach(async (IEntityValidated<TEntity> x) => await x.ValidatedAsync(entity, originalEntity, additionalParameters));
+            await ExecuteHandlersAsync<IEntityValidated<TEntity>>(x => x.ValidatedAsync(entity, originalEntity, additionalParameters));
+        }
+
+        private async Task ExecuteHandlersAsync<THandler>(Func<THandler, Task> handlerFunc)
+        {
+            var handlers = ServiceLocator.Container.GetServices<THandler>().ToList();
+            foreach (var handler in handlers)
+            {
+                await handlerFunc(handler);
+            }
         }
     }
 
