@@ -10,15 +10,17 @@ jobs:
     steps:
     - name: Get version from git tag
       id: get-tag-version
-      run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+      run: |
+        echo "version3=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+        echo "version4=$(echo ${GITHUB_REF_NAME} | cut -d'-' -f1).0" >> $GITHUB_OUTPUT
     - name: Checkout
       uses: actions/checkout@v3
     - name: Set version in Directory.Build.props
       run: |
-        sed -i 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.get-tag-version.outputs.version }}<\/AssemblyVersion>/' Directory.Build.props
-        sed -i 's/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.get-tag-version.outputs.version }}<\/FileVersion>/' Directory.Build.props
-        sed -i 's/<PackageVersion>.*<\/PackageVersion>/<PackageVersion>${{ steps.get-tag-version.outputs.version }}<\/PackageVersion>/' Directory.Build.props
-        sed -i 's/<Version>.*<\/Version>/<Version>${{ steps.get-tag-version.outputs.version }}<\/Version>/' Directory.Build.props
+        sed -i 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.get-tag-version.outputs.version4 }}<\/AssemblyVersion>/' Directory.Build.props
+        sed -i 's/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.get-tag-version.outputs.version4 }}<\/FileVersion>/' Directory.Build.props
+        sed -i 's/<PackageVersion>.*<\/PackageVersion>/<PackageVersion>${{ steps.get-tag-version.outputs.version3 }}<\/PackageVersion>/' Directory.Build.props
+        sed -i 's/<Version>.*<\/Version>/<Version>${{ steps.get-tag-version.outputs.version3 }}<\/Version>/' Directory.Build.props
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
     - name: Build
@@ -30,6 +32,6 @@ jobs:
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
     - name: Create a GitHub Release
-      run: gh release create ${{ steps.get-tag-version.outputs.version }} --verify-tag --generate-notes
+      run: gh release create ${{ steps.get-tag-version.outputs.version3 }} --verify-tag --generate-notes
       env:
          GITHUB_TOKEN: ${{secrets.GITHUBB_TOKEN}}
