@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <Description>The GraphQL package of Moravian Star library that contains common GraphQL related functionalities like: ability to mark a mutation to execute in a single SQL transaction, a common way to handle all exceptions and others.</Description>
   </PropertyGroup>
 
   <ItemGroup>

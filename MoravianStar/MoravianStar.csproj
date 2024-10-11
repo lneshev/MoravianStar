@@ -4,6 +4,7 @@
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <Description>The core package of Moravian Star library that contains SQL related features, a service locator, some utilities, extensions and exceptions.</Description>
   </PropertyGroup>
 
   <ItemGroup>

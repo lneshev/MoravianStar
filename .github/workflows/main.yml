@@ -13,6 +13,12 @@ jobs:
       run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Set version in Directory.Build.props
+      run: |
+        sed -i 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>${{ steps.get-tag-version.outputs.version }}<\/AssemblyVersion>/' Directory.Build.props
+        sed -i 's/<FileVersion>.*<\/FileVersion>/<FileVersion>${{ steps.get-tag-version.outputs.version }}<\/FileVersion>/' Directory.Build.props
+        sed -i 's/<PackageVersion>.*<\/PackageVersion>/<PackageVersion>${{ steps.get-tag-version.outputs.version }}<\/PackageVersion>/' Directory.Build.props
+        sed -i 's/<Version>.*<\/Version>/<Version>${{ steps.get-tag-version.outputs.version }}<\/Version>/' Directory.Build.props
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
     - name: Build
@@ -20,7 +26,7 @@ jobs:
     - name: Test
       run: dotnet test -c Release --no-build
     - name: Pack nugets
-      run: dotnet pack -c Release /p:PackageVersion=${{ steps.get-tag-version.outputs.version }} --no-build --output .
+      run: dotnet pack -c Release --no-build --output .
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
     - name: Create a GitHub Release
