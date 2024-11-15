@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="ElmahCore" Version="2.1.2" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.14" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="14.1.0" />
   </ItemGroup>
 
   <ItemGroup>
