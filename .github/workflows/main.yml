@@ -24,6 +24,12 @@ jobs:
         sed -i 's/<Version>.*<\/Version>/<Version>${{ steps.get-tag-version.outputs.version3 }}<\/Version>/' Directory.Build.props
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: | 
+          6
+          7
+          8
+          9
     - name: Build
       run: dotnet build -c Release
     - name: Test
