@@ -9,6 +9,21 @@
 
   <ItemGroup>
     <PackageReference Include="ElmahCore" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="HotChocolate.AspNetCore" Version="14.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="HotChocolate.AspNetCore" Version="14.3.0" />
   </ItemGroup>
 
