@@ -39,7 +39,7 @@ namespace MoravianStar.Extensions
         /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
         /// <param name="query">The source query.</param>
         /// <param name="filter">The filter that will be used for filtering.</param>
-        /// <param name="dbContext">The DbContext that can be used for creating subqueries in the filter.</param>
+        /// <param name="entityRepository">The <see cref="IEntityRepository{TEntity, TDbContext}"/> that can be used for creating subqueries in the filter.</param>
         /// <returns>The query modified with the applied filtering.</returns>
         public static IQueryable<TEntity> Filter<TEntity, TFilter, TDbContext>(this IQueryable<TEntity> query, TFilter filter, IEntityRepository<TEntity, TDbContext> entityRepository)
             where TEntity : class, IEntityBase
@@ -57,7 +57,7 @@ namespace MoravianStar.Extensions
         /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
         /// <param name="query">The source query.</param>
         /// <param name="sorts">The collection of sorts that will be used for sorting.</param>
-        /// <param name="dbContext">The DbContext that can be used for creating subqueries in the sorter.</param>
+        /// <param name="entityRepository">The <see cref="IEntityRepository{TEntity, TDbContext}"/> that can be used for creating subqueries in the sorter.</param>
         /// <returns>The query modified with the applied sorting.</returns>
         /// <exception cref="ArgumentException"></exception>
         public static IQueryable<TEntity> Sort<TEntity, TSorter, TDbContext>(this IQueryable<TEntity> query, IEnumerable<Sort> sorts, IEntityRepository<TEntity, TDbContext> entityRepository)

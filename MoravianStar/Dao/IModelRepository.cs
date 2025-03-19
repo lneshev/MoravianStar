@@ -24,11 +24,11 @@ namespace MoravianStar.Dao
         /// Asynchronously gets entities, optionally by a filter, sortings and paging, and transforms each entity to a given model.
         /// </summary>
         /// <typeparam name="TFilter">The type of the filter being used for querying.</typeparam>
-        /// <param name="repository">The repository that is used to get the entities.</param>
         /// <param name="filter">The <see cref="FilterSorterBase{TEntity}"/> instance used for filtering.</param>
         /// <param name="sorts">The collection of sorts used for sorting.</param>
         /// <param name="page">The page object used for paging.</param>
         /// <param name="trackable">Specifies whether the query should be trackable or not. See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/tracking"/>.</param>
+        /// <param name="getTotalCount">Specifies whether the total count of the entities should be calculated and returned or not.</param>
         /// <returns>The found entities, transformed into <see cref="IEnumerable{TModel}"/></returns>
         Task<PageResult<TModel>> ReadAsync<TFilter>(TFilter filter = null, IEnumerable<Sort> sorts = null, Page page = null, bool trackable = false, bool getTotalCount = false)
             where TFilter : FilterSorterBase<TEntity>, new();
@@ -54,7 +54,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Asynchronously creates and saves an entity, based on a <typeparamref name="TModel"/>.
         /// </summary>
-        /// <param name="repository">The repository that is used to create the entity.</param>
         /// <param name="model">The model containing the input data of the entity, that will be created.</param>
         /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntitySaving{TEntity}"/> and so on.</param>
         /// <returns>The model containing the input data. The model might be modified by the logic.</returns>
@@ -78,7 +77,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Asynchronously gets an entity by Id and transforms it to a given model.
         /// </summary>
-        /// <param name="repository">The repository that is used to get the entity.</param>
         /// <param name="id">The target Id.</param>
         /// <param name="trackable">Specifies whether the query should be trackable or not. See: <see href="https://docs.microsoft.com/en-us/ef/core/querying/tracking"/>.</param>
         /// <returns>The found <typeparamref name="TEntity"/> by Id, transformed into <typeparamref name="TModel"/></returns>
@@ -87,7 +85,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Asynchronously updates and saves an entity, based on a <typeparamref name="TModel"/>.
         /// </summary>
-        /// <param name="repository">The repository that is used to update the entity.</param>
         /// <param name="model">The model containing the input data of the entity, that will be updated.</param>
         /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntitySaving{TEntity}"/> and so on.</param>
         /// <returns>The model containing the input data. The model might be modified by the logic.</returns>
@@ -96,7 +93,6 @@ namespace MoravianStar.Dao
         /// <summary>
         /// Asynchronously deletes an entity, based on an Id.
         /// </summary>
-        /// <param name="repository">The repository that is used to delete the entity.</param>
         /// <param name="id">The target Id.</param>
         /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntityDeleting{TEntity}"/> and so on.</param>
         /// <returns><see langword="True"/> if the delete operation is successful, otherwise <see langword="false"/>.</returns>

@@ -5,6 +5,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <Description>The GraphQL package of Moravian Star library that contains common GraphQL related functionalities like: ability to mark a mutation to execute in a single SQL transaction, a common way to handle all exceptions and others.</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MoravianStar.Dao
 {
-    /// <inheritdoc cref="IEntityRepository"/>
+    /// <inheritdoc cref="IEntityRepository{TEntity, TDbContext}"/>
     public class EntityRepository<TEntity, TDbContext> : IEntityRepository<TEntity, TDbContext>
         where TEntity : class, IEntityBase
         where TDbContext : DbContext
@@ -188,7 +188,7 @@ namespace MoravianStar.Dao
         }
     }
 
-    /// <inheritdoc cref="IEntityRepository"/>
+    /// <inheritdoc cref="IEntityRepository{TEntity, TId, TDbContext}"/>
     public class EntityRepository<TEntity, TId, TDbContext> : EntityRepository<TEntity, TDbContext>, IEntityRepository<TEntity, TId, TDbContext>
         where TEntity : class, IEntityBase<TId>
         where TDbContext : DbContext

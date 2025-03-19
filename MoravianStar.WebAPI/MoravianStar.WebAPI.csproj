@@ -6,6 +6,7 @@
     <Nullable>disable</Nullable>
     <OpenApiGenerateDocumentsOnBuild>false</OpenApiGenerateDocumentsOnBuild>
     <Description>The WebAPI package of Moravian Star library that contains common WebAPI related functionalities like: a common REST controller for CRUD operations, a common Enum controller, ability to mark a request to execute in a single SQL transaction and others.</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace MoravianStar.Dao
         /// </summary>
         /// <remarks>
         /// In general, all filtering rules should be applied with "AND" operator. But there are some cases, where "OR" operator should be used.
-        /// In such cases the <see cref="LinqKit.PredicateBuilder"/> can be used to easily concatenate lambda expressions with "OR" operator.
+        /// In such cases the <see href="https://github.com/scottksmith95/LINQKit">LinqKit.PredicateBuilder</see> can be used to easily concatenate lambda expressions with "OR" operator.
         /// <para>
         /// One typical case is when there is a dropdown list in the UI which lists only some items of an entity, for example - only the active entities.
         /// A user has selected such active entity and saved the state. Later this entity becomes inactive and in the dropdown there will be no selected value, despite that in
@@ -45,7 +45,7 @@ namespace MoravianStar.Dao
         /// </remarks>
         /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
         /// <param name="query">The source query.</param>
-        /// <param name="dbContext">The DbContext that can be used for creating subqueries.</param>
+        /// <param name="entityRepository">The <see cref="IEntityRepository{TEntity, TDbContext}"/> that can be used for creating subqueries.</param>
         /// <returns>The query modified with the applied filtering.</returns>
         public virtual IQueryable<TEntity> Filter<TDbContext>(IQueryable<TEntity> query, IEntityRepository<TEntity, TDbContext> entityRepository)
             where TDbContext : DbContext
@@ -58,7 +58,7 @@ namespace MoravianStar.Dao
         /// </summary>
         /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
         /// <param name="sorts">The collection of sorts that will be used for defining the sorting rules.</param>
-        /// <param name="dbContext">The DbContext that can be used for creating subqueries.</param>
+        /// <param name="entityRepository">The <see cref="IEntityRepository{TEntity, TDbContext}"/> that can be used for creating subqueries.</param>
         /// <returns>A collection of tuples, where the first tuple's item is a sorting expression and the second tuple's item is a sorting direction.</returns>
         public virtual List<(Expression<Func<TEntity, object>> expression, SortDirection direction)> Sort<TDbContext>(IEnumerable<Sort> sorts, IEntityRepository<TEntity, TDbContext> entityRepository)
             where TDbContext : DbContext
