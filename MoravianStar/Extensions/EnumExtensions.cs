@@ -1,9 +1,12 @@
 ﻿using MoravianStar.Resources;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Threading.Tasks;
 
 namespace MoravianStar.Extensions
 {
@@ -12,6 +15,23 @@ namespace MoravianStar.Extensions
     /// </summary>
     public static class EnumExtensions
     {
+        /// <summary>
+        /// Generates a file (a .json, .js, .ts file or whatever is specified in parameter <paramref name="filePath"/>) containing all enums defined in Moravian Star together with enums from your project.<br />
+        /// It is useful for client projects to have a file containing all enums in the server project.
+        /// This method might be called upon application startup or when a new commit is pushed to the repository, so that the client project always has the latest enums.
+        /// </summary>
+        /// <param name="filePath">The destination path for the generated file.</param>
+        /// <param name="modifyResult">A function that may additionally modify the result.</param>
+        public static async Task GenerateEnumsFileAsync(string filePath, Func<string, string> modifyResult = null)
+        {
+            var enumsArray = AllEnumsAsJson();
+            var enumsDict = enumsArray.ToDictionary(x => x.Name, x => x.Values);
+            var enumsJSON = JsonConvert.SerializeObject(enumsDict, Formatting.Indented);
+            var result = modifyResult != null ? modifyResult.Invoke(enumsJSON) : enumsJSON;
+            await File.WriteAllTextAsync(filePath, result);
+            Console.WriteLine(string.Format(Strings.EnumsFileGeneratedAt, Path.GetFullPath(filePath)));
+        }
+
         /// <summary>
         /// Returns all enums defined in Moravian Star (like: "SortDirection" that is used to specify the sorting direction when using the read functionality) together with enums from your project.
         /// </summary>

@@ -141,19 +141,16 @@
   <data name="DisablingTheSecurityIsNotAllowed" xml:space="preserve">
     <value>Disabling the security is not allowed.</value>
   </data>
+  <data name="EnumsFileGeneratedAt" xml:space="preserve">
+    <value>Enums file generated at: {0}</value>
+  </data>
   <data name="ParametersIdAndModelIdShouldBeSame" xml:space="preserve">
     <value>Parameters: 'id' and 'model.id' should be same.</value>
-  </data>
-  <data name="SavingDataToDBWithoutATransactionIsNotAllowed" xml:space="preserve">
-    <value>Saving data to a database without a transaction is not allowed. First open a database transaction and then save&amp;commit the changes.</value>
   </data>
   <data name="ServiceLocatorWasNotInitialized" xml:space="preserve">
     <value>ServiceLocator was not initialized. Please initialize it with a function that returns the correct scoped (request) service provider.</value>
   </data>
   <data name="TheSpecifiedTypeIsNotAnEnum" xml:space="preserve">
     <value>The specified type is not an enum.</value>
-  </data>
-  <data name="UnknownDatabaseProvider" xml:space="preserve">
-    <value>Unknown database provider</value>
   </data>
 </root>

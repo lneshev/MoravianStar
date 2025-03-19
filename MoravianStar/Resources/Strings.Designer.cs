@@ -133,20 +133,20 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enums file generated at: {0}.
+        /// </summary>
+        public static string EnumsFileGeneratedAt {
+            get {
+                return ResourceManager.GetString("EnumsFileGeneratedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameters: &apos;id&apos; and &apos;model.id&apos; should be same..
         /// </summary>
         public static string ParametersIdAndModelIdShouldBeSame {
             get {
                 return ResourceManager.GetString("ParametersIdAndModelIdShouldBeSame", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Saving data to a database without a transaction is not allowed. First open a database transaction and then save&amp;commit the changes..
-        /// </summary>
-        public static string SavingDataToDBWithoutATransactionIsNotAllowed {
-            get {
-                return ResourceManager.GetString("SavingDataToDBWithoutATransactionIsNotAllowed", resourceCulture);
             }
         }
         
@@ -165,15 +165,6 @@ namespace MoravianStar.Resources {
         public static string TheSpecifiedTypeIsNotAnEnum {
             get {
                 return ResourceManager.GetString("TheSpecifiedTypeIsNotAnEnum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown database provider.
-        /// </summary>
-        public static string UnknownDatabaseProvider {
-            get {
-                return ResourceManager.GetString("UnknownDatabaseProvider", resourceCulture);
             }
         }
     }
