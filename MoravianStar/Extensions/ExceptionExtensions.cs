@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.IdentityModel.Tokens;
 using MoravianStar.Exceptions;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -47,6 +48,9 @@ namespace MoravianStar.Extensions
                     break;
                 case EntityNotUniqueException _:
                     result = (int)HttpStatusCode.Conflict;
+                    break;
+                case AntiforgeryValidationException _:
+                    result = 419;
                     break;
                 default:
                     result = (int)HttpStatusCode.InternalServerError;
