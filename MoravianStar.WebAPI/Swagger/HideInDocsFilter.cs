@@ -17,20 +17,23 @@ namespace MoravianStar.WebAPI.Swagger
         {
             foreach (var apiDescription in context.ApiDescriptions)
             {
-                var actionDescriptor = (ControllerActionDescriptor)apiDescription.ActionDescriptor;
-
-                if (actionDescriptor.MethodInfo.GetCustomAttributes<NonInvokableAttribute>().Any())
+                if (apiDescription.ActionDescriptor is ControllerActionDescriptor)
                 {
-                    var key = "/" + apiDescription.RelativePath.TrimEnd('/');
-                    var operation = (OperationType)Enum.Parse(typeof(OperationType), apiDescription.HttpMethod, true);
+                    var actionDescriptor = (ControllerActionDescriptor)apiDescription.ActionDescriptor;
 
-                    // Drop the operation
-                    swaggerDoc.Paths[key].Operations.Remove(operation);
-
-                    // Drop the entire route if there are no operations left
-                    if (!swaggerDoc.Paths[key].Operations.Any())
+                    if (actionDescriptor.MethodInfo.GetCustomAttributes<NonInvokableAttribute>().Any())
                     {
-                        swaggerDoc.Paths.Remove(key);
+                        var key = "/" + apiDescription.RelativePath.TrimEnd('/');
+                        var operation = (OperationType)Enum.Parse(typeof(OperationType), apiDescription.HttpMethod, true);
+
+                        // Drop the operation
+                        swaggerDoc.Paths[key].Operations.Remove(operation);
+
+                        // Drop the entire route if there are no operations left
+                        if (!swaggerDoc.Paths[key].Operations.Any())
+                        {
+                            swaggerDoc.Paths.Remove(key);
+                        }
                     }
                 }
             }
