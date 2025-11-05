@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MoravianStar.Extensions;
+using MoravianStar.Resources;
 using MoravianStar.WebAPI.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -49,9 +50,10 @@ namespace MoravianStar.WebAPI.Middlewares
                 try
                 {
                     LogCriticalException(ex);
-                    await HandleExceptionAsync(context, ex);
                 }
                 catch { }
+
+                await HandleExceptionAsync(context, ex);
             }
         }
 
@@ -75,8 +77,7 @@ namespace MoravianStar.WebAPI.Middlewares
             var result = JsonConvert.SerializeObject(error, jsonSettings);
 
             // Clear only the response body before writing the error response
-            context.Response.Body.SetLength(0);
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            ClearResponseBody(context.Response);
 
             // Set the appropriate status code based on the exception
             context.Response.StatusCode = SetHttpStatusCodeFromException(exception);
@@ -120,6 +121,18 @@ namespace MoravianStar.WebAPI.Middlewares
         private void LogCriticalException(Exception ex)
         {
             logger.LogCritical(ex, ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+        }
+
+        private void ClearResponseBody(HttpResponse response)
+        {
+            if (response.HasStarted)
+            {
+                throw new InvalidOperationException(Strings.TheResponseCannotBeClearedItHasAlreadyStartedSending);
+            }
+            if (response.Body.CanSeek)
+            {
+                response.Body.SetLength(0);
+            }
         }
     }
 }

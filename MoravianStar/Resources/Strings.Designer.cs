@@ -160,6 +160,15 @@ namespace MoravianStar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The response cannot be cleared, it has already started sending..
+        /// </summary>
+        public static string TheResponseCannotBeClearedItHasAlreadyStartedSending {
+            get {
+                return ResourceManager.GetString("TheResponseCannotBeClearedItHasAlreadyStartedSending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified type is not an enum..
         /// </summary>
         public static string TheSpecifiedTypeIsNotAnEnum {

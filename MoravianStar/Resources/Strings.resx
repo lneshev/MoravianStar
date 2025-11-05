@@ -150,6 +150,9 @@
   <data name="ServiceLocatorWasNotInitialized" xml:space="preserve">
     <value>ServiceLocator was not initialized. Please initialize it with a function that returns the correct scoped (request) service provider.</value>
   </data>
+  <data name="TheResponseCannotBeClearedItHasAlreadyStartedSending" xml:space="preserve">
+    <value>The response cannot be cleared, it has already started sending.</value>
+  </data>
   <data name="TheSpecifiedTypeIsNotAnEnum" xml:space="preserve">
     <value>The specified type is not an enum.</value>
   </data>
