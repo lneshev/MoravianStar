@@ -811,6 +811,16 @@ services.Configure<ApiBehaviorOptions>(options =>
 });
 ```
 
+If you want to modify the logic in the ExceptionMiddleware, first disable it and second derive from it and register your custom middleware (or don't derive from it at all).
+
+```c#
+// Disables the default exception middleware upon app's initialization.
+app.UseMoravianStar(env, () =>
+{
+    Settings.RegisterDefaultExceptionMiddleware = false;
+});
+```
+
 #### Logging of HTTP requests
 MoravianStar WebAPI uses [ElmahCore](https://github.com/ElmahCore/ElmahCore) library to provide a logging of not only failed HTTP requests, but also of successful such. This is useful mostly for debugging/tracing cases. To use this functionality:
 1. Add and setup [ElmahCore](https://github.com/ElmahCore/ElmahCore) library in your project

@@ -10,13 +10,15 @@ namespace MoravianStar.WebAPI.Extensions
         public static void UseMoravianStar(this IApplicationBuilder app, IWebHostEnvironment env, Action additionalSettings = null)
         {
             app.UseMiddleware<ServiceLocatorMiddleware>();
-            if (Settings.Settings.RegisterDefaultExceptionMiddleware)
-            {
-                app.UseMiddleware<ExceptionMiddleware>(env);
-            }
+
             if (additionalSettings != null)
             {
                 additionalSettings();
+            }
+
+            if (Settings.Settings.RegisterDefaultExceptionMiddleware)
+            {
+                app.UseMiddleware<ExceptionMiddleware>(env);
             }
         }
     }
