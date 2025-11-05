@@ -7,6 +7,7 @@ using MoravianStar.WebAPI.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace MoravianStar.WebAPI.Middlewares
 {
     /// <summary>
     /// Custom exception middleware that catches any exception, logs the exception, creates a generic error model,
-    /// generates a correct http status code related to the exception, puts it into the error model and writes the error model to the response.
+    /// sets a correct http status code related to the exception and writes the error model to the response.
     /// </summary>
     public class ExceptionMiddleware
     {
@@ -29,7 +30,15 @@ namespace MoravianStar.WebAPI.Middlewares
             logger = loggerFactory.CreateLogger<ExceptionMiddleware>();
         }
 
-        public async Task Invoke(HttpContext context)
+        /// <summary>
+        /// Processes an incoming HTTP request and invokes the next middleware in the pipeline.
+        /// </summary>
+        /// <remarks>This method ensures that any exceptions thrown during the execution of the middleware
+        /// pipeline are logged and handled appropriately. If an exception occurs, it is logged as a critical error, and
+        /// a custom exception handling mechanism is invoked.</remarks>
+        /// <param name="context">The <see cref="HttpContext"/> representing the current HTTP request.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -46,25 +55,66 @@ namespace MoravianStar.WebAPI.Middlewares
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        /// <summary>
+        /// Handles exceptions that occur during the processing of an HTTP request and writes an appropriate error
+        /// response.
+        /// </summary>
+        /// <remarks>This method serializes the exception details into a JSON response and sets the
+        /// appropriate HTTP status code based on the type of exception. The response body is cleared before writing the
+        /// error response, and the content type is set to "application/json".</remarks>
+        /// <param name="context">The <see cref="HttpContext"/> representing the current HTTP request and response.</param>
+        /// <param name="exception">The <see cref="Exception"/> that was thrown during request processing.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous operation of handling the exception.</returns>
+        protected virtual async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var jsonSettings = new JsonSerializerSettings()
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            var error = new ErrorModel()
+            var error = SetErrorModel(exception);
+            var result = JsonConvert.SerializeObject(error, jsonSettings);
+
+            // Clear only the response body before writing the error response
+            context.Response.Body.SetLength(0);
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+
+            // Set the appropriate status code based on the exception
+            context.Response.StatusCode = SetHttpStatusCodeFromException(exception);
+
+            // Set the content type to application/json
+            context.Response.ContentType = MediaTypeNames.Application.Json;
+
+            // Write the serialized error model to the response body
+            await context.Response.WriteAsync(result);
+        }
+
+        /// <summary>
+        /// Creates and returns an error model based on the provided exception.
+        /// </summary>
+        /// <remarks>This method is intended to be overridden in derived classes to customize the error
+        /// model generation. The returned error model includes sensitive information, such as the stack trace, only
+        /// when the application is running in a development environment.</remarks>
+        /// <param name="exception">The exception to be used for generating the error model.</param>
+        /// <returns>An object representing the error model, containing details such as the exception message.  Additional
+        /// information, such as the exception type and stack trace, is included only in a development environment.</returns>
+        protected virtual object SetErrorModel(Exception exception)
+        {
+            return new ErrorModel()
             {
                 Message = exception.Message,
                 ExceptionType = env.IsDevelopment() ? exception.GetType().FullName : null,
                 StackTrace = env.IsDevelopment() ? exception.StackTrace : null
             };
-            var result = JsonConvert.SerializeObject(error, jsonSettings);
+        }
 
-            context.Response.Clear();
-            context.Response.StatusCode = exception.GetHttpStatusCode();
-            context.Response.ContentType = MediaTypeNames.Application.Json;
-
-            await context.Response.WriteAsync(result);
+        /// <summary>
+        /// Determines the appropriate HTTP status code based on the provided exception.
+        /// </summary>
+        /// <param name="exception">The exception from which to derive the HTTP status code.</param>
+        /// <returns>An integer representing the HTTP status code that corresponds to the specified exception.</returns>
+        protected virtual int SetHttpStatusCodeFromException(Exception exception)
+        {
+            return exception.GetHttpStatusCode();
         }
 
         private void LogCriticalException(Exception ex)
