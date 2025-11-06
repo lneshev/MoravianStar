@@ -61,7 +61,7 @@ namespace MoravianStar.WebAPI.Controllers
         [ExecuteInTransactionAsync]
         public virtual async Task<ActionResult<PageResult<TModel>>> Read([FromQuery] TFilter filter, [FromQuery] List<Sort> sorts, [FromQuery] Page page)
         {
-            var result = await helper.ReadAsync(filter, sorts, page);
+            PageResult<TModel> result = await helper.ReadAsync(filter, sorts, page);
             return result;
         }
 
@@ -102,8 +102,8 @@ namespace MoravianStar.WebAPI.Controllers
         [ExecuteInTransactionAsync]
         public virtual async Task<ActionResult<TModel>> Post([FromBody] TModel model)
         {
-            model = await helper.CreateAsync(model);
-            return CreatedAtAction(nameof(Get), new { id = model.Id }, model);
+            TModel result = await helper.CreateAsync(model);
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         /// <summary>
