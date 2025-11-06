@@ -690,6 +690,7 @@ At this stage and despite that you derived the controller, there are still no en
 
 Additional remarks about EntityRestController:
 - The endpoints for "Read", "Create", "Update" and "Delete" execute in a SQL transaction by default, so there is no need to write any additional code and the whole HTTP request will be executed in a single SQL transaction. This is achieved by marking these endpoints with "ExecuteInTransactionAsync" attribute in EntityRestController. By default, the SQL transaction will be for the default DbContext that you have specified as such (see: [Working with a different DbContext](#working-with-a-different-dbcontext)). If you want the SQL transaction to be for a different DbContext, you should override the desired action (endpoint) and mark it with: "\[ExecuteInTransactionAsync(typeof(OtherDbContext))]". If you want to execute the action (endpoint) not in a SQL transaction, then you should override the desired action and mark it with: "\[ExecuteInTransactionAsync(false)"].
+- The endpoints in this controller return the data in a specific format. To change the format you may create your own base controller and reuse the logics from "EntityRestControllerHelper".
 
 #### EnumsController
 
