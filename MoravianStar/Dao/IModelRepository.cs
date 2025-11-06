@@ -95,7 +95,7 @@ namespace MoravianStar.Dao
         /// </summary>
         /// <param name="id">The target Id.</param>
         /// <param name="additionalParameters">Additional parameters that can be passed to the event handlers, like <see cref="IEntityDeleting{TEntity}"/> and so on.</param>
-        /// <returns><see langword="True"/> if the delete operation is successful, otherwise <see langword="false"/>.</returns>
+        /// <returns>A model of the found entity in a state before the deletion.</returns>
         Task<TModel> DeleteAsync(TId id, IDictionary<string, object> additionalParameters = null);
     }
 }

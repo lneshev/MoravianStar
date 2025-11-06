@@ -45,7 +45,8 @@ namespace MoravianStar.WebAPI.Controllers
         [HttpGet(RoutingConstants.Id)]
         public virtual async Task<ActionResult<TModel>> Get([FromRoute] TId id)
         {
-            return await modelRepository.GetAsync(id, false);
+            TModel result = await GetInternalAsync(id);
+            return result;
         }
 
         /// <summary>
@@ -61,13 +62,7 @@ namespace MoravianStar.WebAPI.Controllers
         [ExecuteInTransactionAsync]
         public virtual async Task<ActionResult<PageResult<TModel>>> Read([FromQuery] TFilter filter, [FromQuery] List<Sort> sorts, [FromQuery] Page page)
         {
-            if (filter is ISecurityFilter securityFilter && !securityFilter.IsSecurityEnabled)
-            {
-                throw new SecurityException(Strings.DisablingTheSecurityIsNotAllowed);
-            }
-
-            var result = await modelRepository.ReadAsync(filter, sorts, page, false, true);
-
+            var result = await ReadInternalAsync(filter, sorts, page);
             return result;
         }
 
@@ -80,7 +75,8 @@ namespace MoravianStar.WebAPI.Controllers
         [HttpGet(RoutingConstants.Action)]
         public virtual async Task<ActionResult<int>> Count([FromQuery] TFilter filter)
         {
-            return await modelRepository.CountAsync(filter);
+            int result = await CountInternalAsync(filter);
+            return result;
         }
 
         /// <summary>
@@ -92,7 +88,8 @@ namespace MoravianStar.WebAPI.Controllers
         [HttpGet(RoutingConstants.Action)]
         public virtual async Task<ActionResult<bool>> Exist([FromQuery] TFilter filter)
         {
-            return await modelRepository.ExistAsync(filter);
+            bool result = await ExistInternalAsync(filter);
+            return result;
         }
 
         /// <summary>
@@ -106,12 +103,7 @@ namespace MoravianStar.WebAPI.Controllers
         [ExecuteInTransactionAsync]
         public virtual async Task<ActionResult<TModel>> Post([FromBody] TModel model)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            model = await modelRepository.CreateAsync(model);
+            model = await CreateInternalAsync(model);
 
             return CreatedAtAction(nameof(Get), new { id = model.Id }, model);
         }
@@ -128,6 +120,99 @@ namespace MoravianStar.WebAPI.Controllers
         [HttpPut(RoutingConstants.Id)]
         [ExecuteInTransactionAsync]
         public virtual async Task<ActionResult<TModel>> Put([FromRoute] TId id, [FromBody] TModel model)
+        {
+            TModel result = await UpdateInternalAsync(id, model);
+            return result;
+        }
+
+        /// <summary>
+        /// Deletes an entity, based on an Id.
+        /// </summary>
+        /// <param name="id">The target Id.</param>
+        /// <returns>A model of the found entity in a state before the deletion.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [NonInvokable]
+        [HttpDelete(RoutingConstants.Id)]
+        [ExecuteInTransactionAsync]
+        public virtual async Task<ActionResult<TModel>> Delete([FromRoute] TId id)
+        {
+            TModel result = await DeleteInternalAsync(id);
+            return result;
+        }
+
+        /// <summary>
+        /// Get entity by Id
+        /// </summary>
+        /// <param name="id">The target Id.</param>
+        /// <returns>The found <typeparamref name="TEntity"/> by Id, transformed into <typeparamref name="TModel"/></returns>
+        protected virtual async Task<TModel> GetInternalAsync(TId id)
+        {
+            return await modelRepository.GetAsync(id, false);
+        }
+
+        /// <summary>
+        /// Get entities, optionally by a filter, sortings and paging, and transforms each entity to a given model.
+        /// </summary>
+        /// <param name="filter">The <see cref="FilterSorterBase{TEntity}"/> instance used for filtering.</param>
+        /// <param name="sorts">The collection of sorts used for sorting.</param>
+        /// <param name="page">The page object used for paging.</param>
+        /// <returns>The found entities, transformed into <see cref="IEnumerable{TModel}"/>, and their total count (excluding the paging), wrapped in <see cref="PageResult{TModel}"/> object.</returns>
+        /// <exception cref="SecurityException"></exception>
+        protected virtual async Task<PageResult<TModel>> ReadInternalAsync(TFilter filter, List<Sort> sorts, Page page)
+        {
+            if (filter is ISecurityFilter securityFilter && !securityFilter.IsSecurityEnabled)
+            {
+                throw new SecurityException(Strings.DisablingTheSecurityIsNotAllowed);
+            }
+
+            return await modelRepository.ReadAsync(filter, sorts, page, false, true);
+        }
+
+        /// <summary>
+        /// Counts entities, optionally by a filter.
+        /// </summary>
+        /// <param name="filter">The <see cref="FilterSorterBase{TEntity}"/> instance used for filtering.</param>
+        /// <returns>The number of the found entities.</returns>
+        protected virtual async Task<int> CountInternalAsync(TFilter filter)
+        {
+            return await modelRepository.CountAsync(filter);
+        }
+
+        /// <summary>
+        /// Checks if entities exist, optionally by a filter.
+        /// </summary>
+        /// <param name="filter">The <see cref="FilterSorterBase{TEntity}"/> instance used for filtering.</param>
+        /// <returns><see langword="True"/> if the entities exist, otherwise <see langword="false"/>.</returns>
+        protected virtual async Task<bool> ExistInternalAsync(TFilter filter)
+        {
+            return await modelRepository.ExistAsync(filter);
+        }
+
+        /// <summary>
+        /// Creates and saves an entity, based on a <typeparamref name="TModel"/>.
+        /// </summary>
+        /// <param name="model">The model containing the input data of the entity, that will be created.</param>
+        /// <returns>The model containing the input data. The model might be modified by the logic.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        protected virtual async Task<TModel> CreateInternalAsync(TModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            return await modelRepository.CreateAsync(model);
+        }
+
+        /// <summary>
+        /// Updates and saves an entity, based on a <typeparamref name="TModel"/>.
+        /// </summary>
+        /// <param name="id">The Id of the entity that will be updated.</param>
+        /// <param name="model">The model containing the input data of the entity, that will be updated.</param>
+        /// <returns>The model containing the input data. The model might be modified by the logic.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidModelStateException"></exception>
+        protected virtual async Task<TModel> UpdateInternalAsync(TId id, TModel model)
         {
             if (IdValidator.IsNullOrEmpty(id))
             {
@@ -153,12 +238,9 @@ namespace MoravianStar.WebAPI.Controllers
         /// Deletes an entity, based on an Id.
         /// </summary>
         /// <param name="id">The target Id.</param>
-        /// <returns><see langword="True"/> if the delete operation is successful, otherwise <see langword="false"/>.</returns>
+        /// <returns>A model of the found entity in a state before the deletion.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        [NonInvokable]
-        [HttpDelete(RoutingConstants.Id)]
-        [ExecuteInTransactionAsync]
-        public virtual async Task<ActionResult<TModel>> Delete([FromRoute] TId id)
+        protected virtual async Task<TModel> DeleteInternalAsync(TId id)
         {
             if (IdValidator.IsNullOrEmpty(id))
             {
