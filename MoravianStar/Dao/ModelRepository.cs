@@ -111,6 +111,11 @@ namespace MoravianStar.Dao
             return model;
         }
 
+        public async Task<bool> ExistsAsync(TId id)
+        {
+            return await EntityRepository.ExistsAsync(id);
+        }
+
         public async Task<TModel> UpdateAsync(TModel model, IDictionary<string, object> additionalParameters = null)
         {
             if (model == null)

@@ -83,6 +83,13 @@ namespace MoravianStar.Dao
         Task<TModel> GetAsync(TId id, bool trackable = false);
 
         /// <summary>
+        /// Asynchronously checks if an entity exists.
+        /// </summary>
+        /// <param name="id">The target Id.</param>
+        /// <returns><see langword="True"/> if the entity exists, otherwise <see langword="false"/>.</returns>
+        Task<bool> ExistsAsync(TId id);
+
+        /// <summary>
         /// Asynchronously updates and saves an entity, based on a <typeparamref name="TModel"/>.
         /// </summary>
         /// <param name="model">The model containing the input data of the entity, that will be updated.</param>

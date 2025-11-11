@@ -134,7 +134,7 @@ namespace MoravianStar.Dao
     /// <inheritdoc cref="IEntityRepository{TEntity, TDbContext}"/>
     /// <typeparam name="TId">The type of entity's ID.</typeparam>
     public interface IEntityRepository<TEntity, TId, TDbContext> : IEntityRepository<TEntity, TDbContext>
-        where TEntity: class, IEntityBase<TId>
+        where TEntity : class, IEntityBase<TId>
         where TDbContext : DbContext
     {
         /// <summary>
@@ -188,6 +188,13 @@ namespace MoravianStar.Dao
             Expression<Func<TEntity, TProjection>> projection = null,
             bool trackable = true)
             where TProjection : class, IProjectionBase;
+
+        /// <summary>
+        /// Asynchronously checks if an entity exists.
+        /// </summary>
+        /// <param name="id">The target Id.</param>
+        /// <returns><see langword="True"/> if the entity exists, otherwise <see langword="false"/>.</returns>
+        Task<bool> ExistsAsync(TId id);
 
         /// <summary>
         /// Asynchronously deletes an entity by Id.

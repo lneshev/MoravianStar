@@ -242,6 +242,16 @@ namespace MoravianStar.Dao
             return proj;
         }
 
+        public async Task<bool> ExistsAsync(TId id)
+        {
+            if (IdValidator.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            return await dbTransaction.DbContext.Set<TEntity>().Where(x => x.Id.Equals(id)).AnyAsync();
+        }
+
         public async Task DeleteAsync(TId id, IDictionary<string, object> additionalParameters = null)
         {
             if (additionalParameters == null)

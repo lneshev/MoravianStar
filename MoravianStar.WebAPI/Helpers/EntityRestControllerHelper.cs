@@ -81,6 +81,16 @@ namespace MoravianStar.WebAPI.Helpers
         }
 
         /// <summary>
+        /// Checks if an entity exists.
+        /// </summary>
+        /// <param name="id">The target Id.</param>
+        /// <returns><see langword="True"/> if the entity exists, otherwise <see langword="false"/>.</returns>
+        public virtual async Task<bool> ExistsAsync(TId id)
+        {
+            return await modelRepository.ExistsAsync(id);
+        }
+
+        /// <summary>
         /// Creates and saves an entity, based on a <typeparamref name="TModel"/>.
         /// </summary>
         /// <param name="model">The model containing the input data of the entity, that will be created.</param>
