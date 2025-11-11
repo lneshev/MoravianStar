@@ -97,7 +97,7 @@ namespace MoravianStar.WebAPI.Controllers
         /// <param name="id">The target Id.</param>
         /// <returns><see langword="True"/> if the entity exists, otherwise <see langword="false"/>.</returns>
         [NonInvokable]
-        [HttpGet(RoutingConstants.Action)]
+        [HttpGet(RoutingConstants.ActionId)]
         public virtual async Task<ActionResult<bool>> Exists([FromRoute] TId id)
         {
             bool result = await helper.ExistsAsync(id);
