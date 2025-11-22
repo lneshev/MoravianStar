@@ -783,6 +783,9 @@ The EnumsController is an api controller that provides endpoints for retrieving 
 
     The purpose for this endpoint can be to help a front-end app to populate enum's values in a dropdown, for example.
 
+Additional remarks about EnumsController:
+- The endpoints in this controller return the data in a specific format. To change the format you may create your own base controller and reuse the logics from "EnumsControllerHelper".
+
 #### Exception handling
 There is a custom exception middleware called: "ExceptionMiddleware", that catches any exception, logs the exception, creates a generic error model, generates a correct HTTP status code related to the exception, puts it into the error model and writes the error model to the response. The middleware is registered together with MoravianStar's initialization (app.UseMoravianStar(env);), but you may register it individually, too.
 

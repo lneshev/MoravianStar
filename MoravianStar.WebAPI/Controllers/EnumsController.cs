@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MoravianStar.Extensions;
-using MoravianStar.Resources;
 using MoravianStar.WebAPI.Constants;
-using System;
+using MoravianStar.WebAPI.Helpers;
 using System.Collections.Generic;
 
 namespace MoravianStar.WebAPI.Controllers
@@ -11,24 +10,25 @@ namespace MoravianStar.WebAPI.Controllers
     [Route(RoutingConstants.ApiController)]
     public class EnumsController : ControllerBase
     {
+        protected readonly EnumsControllerHelper helper;
+
+        public EnumsController()
+        {
+            helper = new EnumsControllerHelper();
+        }
+
         [HttpGet]
         public virtual ActionResult<List<EnumNameValue>> Get()
         {
-            var enumsAsJson = EnumExtensions.AllEnumsAsJson();
-            return enumsAsJson;
+            List<EnumNameValue> result = helper.Get();
+            return result;
         }
 
         [HttpGet("{enumName}")]
         public virtual ActionResult<List<EnumTextValue>> Get([FromRoute] string enumName, [FromQuery] List<int> exactEnumValues, [FromQuery] bool sortByText = false)
         {
-            var stringResourceTypeForEnums = Settings.Settings.StringResourceTypeForEnums;
-            if (stringResourceTypeForEnums == null)
-            {
-                throw new ArgumentNullException(nameof(Settings.Settings.StringResourceTypeForEnums), Strings.AStringsResourceTypeForEnumsWasNotSet);
-            }
-
-            var enumValues = EnumExtensions.GetEnumValues(enumName, exactEnumValues, stringResourceTypeForEnums, sortByText);
-            return enumValues;
+            List<EnumTextValue> result = helper.Get(enumName, exactEnumValues, sortByText);
+            return result;
         }
     }
 }
