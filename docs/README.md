@@ -617,7 +617,7 @@ At this stage and despite that you derived the controller, there are still no en
     ```c#
     public class UsersController : EntityRestController<User, int, UserModel, UserFilter, MyDbContext>
     {
-        public override async Task<ActionResult<int>> Exist([FromQuery] UserFilter filter)
+        public override async Task<ActionResult<bool>> Exist([FromQuery] UserFilter filter)
         {
             return await base.Exist(filter);
         }
@@ -635,7 +635,7 @@ At this stage and despite that you derived the controller, there are still no en
     ```c#
     public class UsersController : EntityRestController<User, int, UserModel, UserFilter, MyDbContext>
     {
-        public override async Task<ActionResult<int>> Exists([FromRoute] TId id)
+        public override async Task<ActionResult<bool>> Exists([FromRoute] TId id)
         {
             return await base.Exists(id);
         }
