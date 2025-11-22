@@ -255,6 +255,9 @@ int usersCount = await Persistence.ForEntity<User>().CountAsync<UserFilter>();
 ```c#
 // Checks if users exist in the DB. A filter may be applied. The same functionality exist as a shortcut when working with models (Persistence.ForModel<>())
 bool usersExist = await Persistence.ForEntity<User>().ExistAsync<UserFilter>();
+
+// Checks if a user exists in the DB by ID. The same functionality exist as a shortcut when working with models (Persistence.ForModel<>())
+bool userExists = await Persistence.ForEntity<User, int>().ExistsAsync(1);
 ```
 
 #### Save (create/update)
@@ -626,6 +629,22 @@ At this stage and despite that you derived the controller, there are still no en
     Request URL: https://localhost:80/api/users/exist?
         NameContainsInsensitive=John
         ExcludeIds[0]=1
+    ```
+
+- Exists
+    ```c#
+    public class UsersController : EntityRestController<User, int, UserModel, UserFilter, MyDbContext>
+    {
+        public override async Task<ActionResult<int>> Exists([FromRoute] TId id)
+        {
+            return await base.Exists(id);
+        }
+    }
+    ```
+    ```
+    // Example "exists" request:
+    Request method: GET
+    Request URL: https://localhost:80/api/users/exists/1
     ```
 
 - Create
