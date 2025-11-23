@@ -709,11 +709,22 @@ At this stage and despite that you derived the controller, there are still no en
 
 Additional remarks about EntityRestController:
 - The endpoints for "Read", "Create", "Update" and "Delete" execute in a SQL transaction by default, so there is no need to write any additional code and the whole HTTP request will be executed in a single SQL transaction. This is achieved by marking these endpoints with "ExecuteInTransactionAsync" attribute in EntityRestController. By default, the SQL transaction will be for the default DbContext that you have specified as such (see: [Working with a different DbContext](#working-with-a-different-dbcontext)). If you want the SQL transaction to be for a different DbContext, you should override the desired action (endpoint) and mark it with: "\[ExecuteInTransactionAsync(typeof(OtherDbContext))]". If you want to execute the action (endpoint) not in a SQL transaction, then you should override the desired action and mark it with: "\[ExecuteInTransactionAsync(false)"].
-- The endpoints in this controller return the data in a specific format. To change the format you may create your own base controller and reuse the logics from "EntityRestControllerHelper".
+- The endpoints in this controller return the data in a specific format. To change the format you may create your own base controller (without deriving EntityRestController) and reuse the logics from "EntityRestControllerHelper".
 
 #### EnumsController
 
-The EnumsController is an api controller that provides endpoints for retrieving enumerations in different ways:
+The EnumsController is an abstract base api controller that provides endpoints for retrieving enumerations in different ways.
+
+To start using the functionalities of this controller first you need to create your own controller and derive the EnumsController:
+
+```c#
+public class EnumsController : MoravianStar.WebAPI.Controllers.EnumsController
+{
+}
+```
+
+At this stage and despite that you derived the controller, there are still no endpoints that are exposed. This is done intentionally, because you might not need all of these functionalities exposed at all. It is achieved by filter attribute: "NonInvokable" that will throw "MethodAccessException" if someone decides to try to access an action in the controller that is not overridden explicitly. So, in order an endpoint to be visible to the audience, you should explicitly override the desired action (and call the base logic and/or write your own):
+
 - Endpoint: **[GET] "/api/enums"** returns all enums defined in Moravian Star (like: "SortDirection" that is used to specify the sorting direction when using the read functionality) together with enums from your project. To specify which enums to be exposed from your project, set setting: "AssemblyForEnums" upon app's initialization:
     ```c#
     // Sets the assembly for the enums upon app's initialization.
@@ -722,18 +733,30 @@ The EnumsController is an api controller that provides endpoints for retrieving 
         Settings.AssemblyForEnums = typeof(UserStatus).Assembly;
     });
     ```
+
+    Then derive the base controller and override this action:
+    ```c#
+    public class EnumsController : MoravianStar.WebAPI.Controllers.EnumsController
+    {
+        public override ActionResult<List<EnumNameValue>> Get()
+        {
+            return base.Get();
+        }
+    }
+    ```
+
     This endpoint will return a JSON array like this:
     ```json
     [
         {
-            "name": "SortDirection", // Exist in MoravianStar
+            "name": "SortDirection", // Exists in MoravianStar
             "values": {
                 "Asc": 0,
                 "Desc": 1
             }
         },
         {
-            "name": "UserStatus", // Exist in your project
+            "name": "UserStatus", // Exists in your project
             "values": {
                 "Inactive": 0,
                 "Active": 1
@@ -741,7 +764,7 @@ The EnumsController is an api controller that provides endpoints for retrieving 
         }
     ]
     ```
-    The purpose for this endpoint can be to help a front-end app to store all these enums in a dictionary and later use this dictionary to check some values like this: "model.status === enums.UserStatus.Active ? ...", for example.
+    The purpose of this endpoint can be to help a front-end app to store all these enums in a dictionary and later use this dictionary to check some values like this: "model.status === enums.UserStatus.Active ? ...", for example.
 - Endpoint: **[GET] "/api/enums/{enumName}"** returns the values of a single enum in multiple formats like its integer value, its string value and its translated string value. Similarly to the latter endpoint (described above), this endpoint can return enums from Moravian Star, as well as enums from your project. Again you need to specify which enums to be exposed from your project by set setting: "AssemblyForEnums" as well as "StringResourceTypeForEnums" upon app's initialization:
     ```c#
     // Sets the assembly for the enums upon app's initialization.
@@ -750,6 +773,17 @@ The EnumsController is an api controller that provides endpoints for retrieving 
         Settings.AssemblyForEnums = typeof(UserStatus).Assembly;
         Settings.StringResourceTypeForEnums = typeof(Strings);
     });
+    ```
+
+    Then derive the base controller and override this action:
+    ```c#
+    public class EnumsController : MoravianStar.WebAPI.Controllers.EnumsController
+    {
+        public override ActionResult<List<EnumTextValue>> Get([FromRoute] string enumName, [FromQuery] List<int> exactEnumValues, [FromQuery] bool sortByText = false)
+        {
+            return base.Get(enumName, exactEnumValues, sortByText);
+        }
+    }
     ```
     This endpoint will return a JSON array like this:
     ```json
@@ -784,7 +818,7 @@ The EnumsController is an api controller that provides endpoints for retrieving 
     The purpose for this endpoint can be to help a front-end app to populate enum's values in a dropdown, for example.
 
 Additional remarks about EnumsController:
-- The endpoints in this controller return the data in a specific format. To change the format you may create your own base controller and reuse the logics from "EnumsControllerHelper".
+- The endpoints in this controller return the data in a specific format. To change the format you may create your own base controller (without deriving EnumsController) and reuse the logics from "EnumsControllerHelper".
 
 #### Exception handling
 There is a custom exception middleware called: "ExceptionMiddleware", that catches any exception, logs the exception, creates a generic error model, generates a correct HTTP status code related to the exception, puts it into the error model and writes the error model to the response. The middleware is registered together with MoravianStar's initialization (app.UseMoravianStar(env);), but you may register it individually, too.
