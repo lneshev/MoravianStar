@@ -291,6 +291,7 @@ userModel = await Persistence.ForModel<UserModel, UserEntity, int>().UpdateAsync
 
 - Upon saving an entity you may plug your custom business logic by creating services that implements the following interfaces:
   - IGetOriginalEntity
+  - IEntityFilling
   - IEntityValidating
   - IEntityValidated
   - IEntitySaving

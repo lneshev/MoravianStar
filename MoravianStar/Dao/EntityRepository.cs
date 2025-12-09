@@ -111,6 +111,8 @@ namespace MoravianStar.Dao
 
             TEntity originalEntity = await GetOriginalEntityAsync(entity, additionalParameters);
 
+            await ExecuteHandlersAsync<IEntityFilling<TEntity>>(x => x.FillingAsync(entity, originalEntity, additionalParameters));
+
             await ValidateAsync(entity, originalEntity, additionalParameters);
 
             await ExecuteHandlersAsync<IEntitySaving<TEntity>>(x => x.SavingAsync(entity, originalEntity, additionalParameters));
