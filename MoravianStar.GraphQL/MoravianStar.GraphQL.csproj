@@ -6,6 +6,10 @@
     <Nullable>disable</Nullable>
     <Description>The GraphQL package of Moravian Star library that contains common GraphQL related functionalities like: ability to mark a mutation to execute in a single SQL transaction, a common way to handle all exceptions and others.</Description>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Authors>Lyuboslav Neshev</Authors>
+    <PackageTags>EntityFrameworkCore; EFCore; SQL; CRUD; GraphQL; HotChocolate</PackageTags>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,11 +17,11 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.11" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.12" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.11" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.12" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
