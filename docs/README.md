@@ -9,7 +9,7 @@
 Moravian Star is a library built on top of [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) and [Hot Chocolate](https://chillicream.com/docs/hotchocolate) that reduces boilerplate code in your WebAPI, GraphQL, console or other type of applications. It provides a robust foundation for SQL database operations, CRUD workflows, and common application functionalities.
 
 [![NuGet](https://img.shields.io/nuget/v/MoravianStar.svg)](https://www.nuget.org/packages/MoravianStar)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](..\LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/lneshev/MoravianStar/blob/main/LICENSE)
 
 > **📚 Demo Repository:** Check out [Moravian Star - Demo](https://github.com/lneshev/MoravianStar-Demo) for comprehensive examples and usage patterns.
 
@@ -1375,7 +1375,7 @@ public class UsersController : EntityRestController<User, int, UserModel, UserFi
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](..\LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/lneshev/MoravianStar/blob/main/LICENSE) file for details.
 
 ## Contributing
 
