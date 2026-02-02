@@ -46,7 +46,7 @@ Moravian Star addresses a common problem in enterprise applications: developers 
 - ✅ Plug in custom business logic at specific lifecycle points
 - ✅ Build type-safe, maintainable applications faster
 
-**Supported .NET Versions:** .NET 6.0, 7.0, 8.0, 9.0
+**Supported .NET Versions:** .NET 6.0, 7.0, 8.0, 9.0 and 10.0
 
 ## Key Features
 

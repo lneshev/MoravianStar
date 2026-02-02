@@ -1,11 +1,10 @@
-﻿#if NET8_0_OR_GREATER
+﻿#if NET6_0 || NET7_0
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using MoravianStar.WebAPI.Attributes;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 
 namespace MoravianStar.WebAPI.Swagger
@@ -26,10 +25,10 @@ namespace MoravianStar.WebAPI.Swagger
                     if (actionDescriptor.MethodInfo.GetCustomAttributes<NonInvokableAttribute>().Any())
                     {
                         var key = "/" + apiDescription.RelativePath.TrimEnd('/');
-                        var httpMethod = (HttpMethod)Enum.Parse(typeof(HttpMethod), apiDescription.HttpMethod, true);
+                        var operation = (OperationType)Enum.Parse(typeof(OperationType), apiDescription.HttpMethod, true);
 
                         // Drop the operation
-                        swaggerDoc.Paths[key].Operations.Remove(httpMethod);
+                        swaggerDoc.Paths[key].Operations.Remove(operation);
 
                         // Drop the entire route if there are no operations left
                         if (!swaggerDoc.Paths[key].Operations.Any())

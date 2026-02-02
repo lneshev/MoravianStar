@@ -9,6 +9,7 @@
     <RepositoryUrl>https://github.com/lneshev/MoravianStar</RepositoryUrl>
     <PackageIcon>logo-128x128.png</PackageIcon>
     <NoWarn>$(NoWarn);1591;1712</NoWarn>
+    <NuGetAuditMode>direct</NuGetAuditMode>
   </PropertyGroup>
 
   <ItemGroup>
