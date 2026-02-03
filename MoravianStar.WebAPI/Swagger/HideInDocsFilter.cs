@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi;
 using MoravianStar.WebAPI.Attributes;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -26,7 +25,7 @@ namespace MoravianStar.WebAPI.Swagger
                     if (actionDescriptor.MethodInfo.GetCustomAttributes<NonInvokableAttribute>().Any())
                     {
                         var key = "/" + apiDescription.RelativePath.TrimEnd('/');
-                        var httpMethod = (HttpMethod)Enum.Parse(typeof(HttpMethod), apiDescription.HttpMethod, true);
+                        var httpMethod = new HttpMethod(apiDescription.HttpMethod);
 
                         // Drop the operation
                         swaggerDoc.Paths[key].Operations.Remove(httpMethod);
