@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.Execution;
 using MoravianStar.Extensions;
 
 namespace MoravianStar.GraphQL.Filters

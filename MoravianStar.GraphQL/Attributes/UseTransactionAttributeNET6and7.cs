@@ -1,4 +1,4 @@
-﻿#if NET8_0_OR_GREATER
+﻿#if NET6_0 || NET7_0
 using HotChocolate.Types;
 using HotChocolate.Types.Descriptors;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +24,7 @@ namespace MoravianStar.GraphQL.Attributes
 
         protected override void OnConfigure(IDescriptorContext context, IObjectFieldDescriptor descriptor, MemberInfo member)
         {
-            descriptor.Extend().Configuration.MiddlewareConfigurations.Add(new(next => async context =>
+            descriptor.Extend().Definition.MiddlewareDefinitions.Add(new(next => async context =>
             {
                 var serviceType = typeof(IDbTransaction<>).MakeGenericType(DbContextType);
                 var dbTransaction = (IDbTransaction)context.Services.GetRequiredService(serviceType);
